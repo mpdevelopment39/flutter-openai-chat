@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_openai_chat/app/constants.dart';
 import 'package:flutter_openai_chat/app/injector.dart';
+import 'package:flutter_openai_chat/app/theme.dart';
 import 'package:flutter_openai_chat/ui/providers.dart';
 import 'package:flutter_openai_chat/ui/ui_utils.dart';
 import 'package:flutter_openai_chat/ui/widgets/message_widget.dart';
@@ -15,21 +16,18 @@ class ChatPage extends ConsumerStatefulWidget {
 }
 
 class _ChatPageState extends ConsumerState<ChatPage> {
-  TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
+  
   @override
   void initState() {
     super.initState();
-    Future(() {
-      ref.read(settingsProvider.notifier).addNewMessage(
-        const MessageWidget(text: 'How can I help you today?  Ask me something like: Tell me the 5 best restaurants in Barcelona.',
-        userType: UserType.assistant));
-    });
+    Future(() => _insertStartMessage());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(247, 246, 252, 1),
+      backgroundColor: AppTheme.colorBackground,
       appBar: AppBar(
         centerTitle: false,
         title: Column(
@@ -44,10 +42,17 @@ class _ChatPageState extends ConsumerState<ChatPage> {
           Padding(
             padding: const EdgeInsets.only(right:10.0),
             child: IconButton(
-              onPressed: settingsAction, 
+              onPressed: _resetAction, 
+              icon: const Icon(Icons.restore)
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right:10.0),
+            child: IconButton(
+              onPressed: _settingsAction, 
               icon: const Icon(Icons.settings)
             ),
-          )
+          ),
         ],
       ),
       body: SafeArea(
@@ -56,7 +61,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
             Flexible(
               child: RawScrollbar(
                 thumbVisibility: true,
-                thumbColor: Colors.grey,
+                thumbColor: AppTheme.colorGrey,
                 thickness: 4,
                 radius: const Radius.circular(4),
                 child: ListView(
@@ -67,7 +72,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
             ),
             Container(
               height: 70,
-              color: Colors.white,
+              color: AppTheme.colorWhite,
               padding: const EdgeInsets.symmetric(horizontal:12),
               child: Row(
                 children: [
@@ -76,20 +81,32 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                       padding: const EdgeInsets.only(right:8.0),
                       child: TextField(
                         controller: _textEditingController,
-                        style: const TextStyle(color: Colors.black),
+                        style: const TextStyle(color: AppTheme.colorBlack),
                         decoration: const InputDecoration.collapsed(
                           hintText: "Ask me something",
-                          hintStyle: TextStyle(color: Colors.black),
+                          hintStyle: TextStyle(color: AppTheme.colorBlack),
                         ),
                       ),
                     )
                   ),
-                  IconButton(onPressed: (){
+                  IconButton(onPressed: () async {
                     if(_textEditingController.text.isEmpty) return;
-                    ref.read(settingsProvider.notifier).addNewMessage(
-                      MessageWidget(text: _textEditingController.text.toString(), 
-                      userType: UserType.user));
-                    _textEditingController.clear();
+                      ref.read(settingsProvider.notifier).addNewMessage(
+                        MessageWidget(text: _textEditingController.text.toString(), 
+                        userType: UserType.user));
+                     _textEditingController.clear();
+                     /*
+                       ref.read(settingsProvider.notifier).addNewMessage(
+                        const MessageWidget(text: '',
+                        userType: UserType.assistant,
+                        isWriting: true,
+                      ));
+                      await Future.delayed(const Duration(seconds: 3));
+                      ref.read(settingsProvider.notifier).addNewMessage(
+                        const MessageWidget(text: 'Texto largo con la respuesta pasado x tiempo',
+                        userType: UserType.assistant,
+                      ));
+                     */
                   }, icon: const Icon(Icons.send)),
                 ],
               ),
@@ -100,7 +117,14 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     );
   }
 
-  void settingsAction(){
+  void _resetAction(){
+    ref.read(settingsProvider.notifier).resetSettings();
+    Future.delayed(const Duration(milliseconds: 100)).then((value) {
+      _insertStartMessage();
+    });
+  }
+
+  void _settingsAction(){
     injector<UiUtils>().showModalBottomWithOptions(
       context: context,
       title: 'Configure requests',
@@ -131,5 +155,11 @@ class _ChatPageState extends ConsumerState<ChatPage> {
         const Icon(Icons.thermostat_rounded)),
       ]
     );
+  }
+
+  void _insertStartMessage(){
+    ref.read(settingsProvider.notifier).addNewMessage(
+      const MessageWidget(text: 'How can I help you today?  Ask me something like: Tell me the 5 best restaurants in Barcelona.',
+      userType: UserType.assistant));
   }
 }

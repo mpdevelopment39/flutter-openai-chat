@@ -82,7 +82,7 @@ class ModalOptions extends StatelessWidget {
       if(cont < listOptions.length){
         widgetsToPaint.add(const Padding(
           padding: EdgeInsets.symmetric(vertical:8.0),
-          child: Divider(color: Colors.grey, thickness: 1.0),
+          child: Divider(color: AppTheme.colorGrey, thickness: 1.0),
         ));
       }
       cont++;

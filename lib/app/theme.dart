@@ -13,6 +13,7 @@ class AppTheme {
   static ColorScheme colorScheme = materialTheme.colorScheme;
   static const Color colorWhite = Color(0xFFFFFFFF);
   static const Color colorBlack = Color(0xFF111E21);
+  static const Color colorGrey = Colors.grey;
   static const Color colorBlue = Color.fromRGBO(106, 139, 244, 1);
   static const Color colorBlackLight = Colors.black26;
   static const Color colorBlackIntermediate = Colors.black54;

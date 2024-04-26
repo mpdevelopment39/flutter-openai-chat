@@ -1,21 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_openai_chat/app/constants.dart';
 import 'package:flutter_openai_chat/app/theme.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:lottie/lottie.dart';
 
 enum UserType { assistant, user }
 
 class MessageWidget extends StatelessWidget {
   final String text;
   final UserType userType;
+  final bool isWriting;
 
-  const MessageWidget({Key? key, required this.text, required this.userType}) : super(key: key);
+  const MessageWidget({Key? key, required this.text, required this.userType,this.isWriting = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final isAssistant = userType == UserType.assistant;
     final messageAlign = isAssistant ? Alignment.centerLeft : Alignment.centerRight;
     final messageColor = isAssistant ? AppTheme.colorWhite : AppTheme.colorBlue;
-
+    if(isWriting && isAssistant){
+      return Container(
+      alignment: messageAlign,
+      child: SizedBox(
+        width: 70,
+        child: Lottie.asset('$assetsAnimations/typing.json')),
+      );
+    }
     return Container(
       margin: EdgeInsets.fromLTRB(isAssistant ? 0 : 60,8,!isAssistant ? 0 : 60,8),
       padding: const EdgeInsets.symmetric(vertical:12.0,horizontal: 20),
@@ -29,7 +39,7 @@ class MessageWidget extends StatelessWidget {
         ),
         boxShadow: const [
           BoxShadow(
-            color:Colors.black12,
+            color:AppTheme.colorBlackLight,
             blurRadius: 20,
             offset: Offset(0, 5)
           )
@@ -42,32 +52,24 @@ class MessageWidget extends StatelessWidget {
           child: DefaultTextStyle(
             style: const TextStyle(
               fontSize: 16.0,
-              color: Colors.black,
+              color: AppTheme.colorBlack,
             ),
-            child: /* Text(text,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    color: isAssistant ? Colors.black : Colors.white,
-                    fontSize: 16.0,
-                  )
-                ) */
-            
-             isAssistant 
-                ? AnimatedTextKit(
-                  animatedTexts: [
-                    TypewriterAnimatedText(text),
-                  ],
-                  repeatForever: false,
-                  isRepeatingAnimation: false,
-                  displayFullTextOnTap: true,
-                  totalRepeatCount: 0,
-                )
-                : Text(text,
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,  
-                  ),
+            child: isAssistant 
+              ? AnimatedTextKit(
+                animatedTexts: [
+                  TypewriterAnimatedText(text),
+                ],
+                repeatForever: false,
+                isRepeatingAnimation: false,
+                displayFullTextOnTap: true,
+                totalRepeatCount: 0,
+              )
+              : Text(text,
+                textAlign: TextAlign.right,
+                style: const TextStyle(
+                  color: AppTheme.colorWhite,
+                  fontSize: 16.0,
+                ),
             ),
           )
       )
