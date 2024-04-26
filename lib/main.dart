@@ -5,6 +5,7 @@ import 'package:flutter_openai_chat/app/injector.dart';
 import 'package:flutter_openai_chat/app/theme.dart';
 import 'package:flutter_openai_chat/ui/pages/chat_page.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
   //* Leemos las variables de entorno para poder hacer uso de ellas en todo el proyecto
@@ -20,7 +21,7 @@ Future<void> main() async {
   //* Utilizamos el paquete de device_preview para poder hacer pruebas de interfaz en cualquier dispositivo
   runApp(DevicePreview(
     enabled: false, //!kReleaseMode,
-    builder: (context) => const MyApp()),
+    builder: (context) => const ProviderScope(child:MyApp())),
   );
 }
 

@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_openai_chat/app/constants.dart';
 import 'package:flutter_openai_chat/app/injector.dart';
+import 'package:flutter_openai_chat/ui/providers.dart';
 import 'package:flutter_openai_chat/ui/ui_utils.dart';
 import 'package:flutter_openai_chat/ui/widgets/message_widget.dart';
 import 'package:flutter_openai_chat/ui/widgets/modal_options.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ChatPage extends StatelessWidget {
+class ChatPage extends ConsumerStatefulWidget {
   const ChatPage({super.key});
+
+@override
+  ConsumerState<ConsumerStatefulWidget> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends ConsumerState<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +27,7 @@ class ChatPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Text('OpenAI Chat Example'),
-            Text('How can i help you?',style: Theme.of(context).textTheme.bodyMedium),
+            Text('Model: ${ref.watch(settingsProvider).model} (Temperature: ${ref.watch(settingsProvider).temperature})',style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),
         actions: [
@@ -33,8 +42,9 @@ class ChatPage extends StatelessWidget {
                       Navigator.pop(context);
                       injector<UiUtils>().showWheelOptions(context,
                         "Select model",
-                        ['GPT 3.5','GPT 4 TURBO','Dall-e'],
+                        models,
                         (selectedIndex) async {
+                          ref.watch(settingsProvider.notifier).updateModel(models[selectedIndex]);
                           Navigator.pop(context);
                         }
                       );
@@ -44,8 +54,9 @@ class ChatPage extends StatelessWidget {
                       Navigator.pop(context);
                       injector<UiUtils>().showWheelOptions(context,
                         "Select temperature",
-                        [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],
+                        temperatures,
                         (selectedIndex) async {
+                          ref.watch(settingsProvider.notifier).updateTemperature(temperatures[selectedIndex]);
                           Navigator.pop(context);
                         }
                       );
@@ -69,42 +80,6 @@ class ChatPage extends StatelessWidget {
                 child: ListView(
                   padding: const EdgeInsets.all(16.0),
                   children: const [
-                    MessageWidget(
-                      text: '¡Hola! ¿Qué tal? con un texto larguisimo para ver como se comporta el contenedor y si cabe todo el texto en varias lineas. Sorprendentemente funciona como se espera.',
-                      userType: UserType.bot,
-                    ),
-                    MessageWidget(
-                      text: '¡Hola! ¿Qué tal? con un texto larguisimo para ver como se comporta el contenedor y si cabe todo el texto en varias lineas. Sorprendentemente funciona como se espera.',
-                      userType: UserType.user,
-                    ),
-                    MessageWidget(
-                      text: '¡Hola! ¿Qué tal? con un texto larguisimo para ver como se comporta el contenedor y si cabe todo el texto en varias lineas. Sorprendentemente funciona como se espera.',
-                      userType: UserType.user,
-                    ),
-                    MessageWidget(
-                      text: '¡Hola! ¿Qué tal? con un texto larguisimo para ver como se comporta el contenedor y si cabe todo el texto en varias lineas. Sorprendentemente funciona como se espera.',
-                      userType: UserType.bot,
-                    ),
-                    MessageWidget(
-                      text: '¡Hola! ¿Qué tal? con un texto larguisimo para ver como se comporta el contenedor y si cabe todo el texto en varias lineas. Sorprendentemente funciona como se espera.',
-                      userType: UserType.bot,
-                    ),
-                    MessageWidget(
-                      text: '¡Hola! ¿Qué tal? con un texto larguisimo para ver como se comporta el contenedor y si cabe todo el texto en varias lineas. Sorprendentemente funciona como se espera.',
-                      userType: UserType.user,
-                    ),
-                    MessageWidget(
-                      text: '¡Hola! ¿Qué tal? con un texto larguisimo para ver como se comporta el contenedor y si cabe todo el texto en varias lineas. Sorprendentemente funciona como se espera.',
-                      userType: UserType.user,
-                    ),
-                    MessageWidget(
-                      text: '¡Hola! ¿Qué tal? con un texto larguisimo para ver como se comporta el contenedor y si cabe todo el texto en varias lineas. Sorprendentemente funciona como se espera.',
-                      userType: UserType.bot,
-                    ),
-                    MessageWidget(
-                      text: '¡Hola! ¿Qué tal? con un texto larguisimo para ver como se comporta el contenedor y si cabe todo el texto en varias lineas. Sorprendentemente funciona como se espera.',
-                      userType: UserType.user,
-                    ),
                     MessageWidget(
                       text: '¡Hola! ¿Qué tal? con un texto larguisimo para ver como se comporta el contenedor y si cabe todo el texto en varias lineas. Sorprendentemente funciona como se espera.',
                       userType: UserType.bot,

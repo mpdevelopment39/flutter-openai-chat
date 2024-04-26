@@ -1,9 +1,12 @@
 // ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
+import 'package:flutter_openai_chat/app/constants.dart';
+import 'package:flutter_openai_chat/ui/providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wheel_slider/wheel_slider.dart';
 import '../../app/theme.dart';
 
-class CustomWheleer extends StatefulWidget {
+class CustomWheleer extends ConsumerStatefulWidget {
   final String title;
   final List<dynamic> elements;
   final Function(int selectedIndex) saveAction;
@@ -11,11 +14,21 @@ class CustomWheleer extends StatefulWidget {
   const CustomWheleer({Key? key, required this.title, required this.elements, required this.saveAction}) : super(key: key);
 
   @override
-  State<CustomWheleer> createState() => _CustomWheleerState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _CustomWheleerState();
 }
 
-class _CustomWheleerState extends State<CustomWheleer> {
+class _CustomWheleerState extends ConsumerState<CustomWheleer> {
   int selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.elements == temperatures){
+      selectedIndex = temperatures.indexOf(ref.read(settingsProvider).temperature);
+    }else{
+      selectedIndex = models.indexOf(ref.read(settingsProvider).model);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +82,7 @@ class _CustomWheleerState extends State<CustomWheleer> {
                           isVibrate: true,
                           initValue: selectedIndex,
                           verticalListWidth: double.infinity,
+                          listWidth: double.infinity,
                           onValueChanged: (index) => setState(() => selectedIndex = index),
                           hapticFeedbackType: HapticFeedbackType.vibrate,
                           children: List.generate(widget.elements.length, (index) => Center(child: Text(widget.elements[index].toString()))),
