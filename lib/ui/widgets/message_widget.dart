@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openai_chat/app/constants.dart';
 import 'package:flutter_openai_chat/app/theme.dart';
@@ -19,14 +20,17 @@ class MessageWidget extends StatelessWidget {
     final messageAlign = isAssistant ? Alignment.centerLeft : Alignment.centerRight;
     final messageColor = isAssistant ? AppTheme.colorWhite : AppTheme.colorBlue;
     if(isWriting && isAssistant){
-      return Container(
-      alignment: messageAlign,
-      child: SizedBox(
-        width: 70,
-        child: Lottie.asset('$assetsAnimations/typing.json')),
+      return FadeInDown(
+        from: 20,
+        child: Container(
+        alignment: messageAlign,
+        child: SizedBox(
+          width: 70,
+          child: Lottie.asset('$assetsAnimations/typing.json')),
+        ),
       );
     }
-    return Container(
+    Widget child = Container(
       margin: EdgeInsets.fromLTRB(isAssistant ? 0 : 60,8,!isAssistant ? 0 : 60,8),
       padding: const EdgeInsets.symmetric(vertical:12.0,horizontal: 20),
       decoration: BoxDecoration(
@@ -74,5 +78,11 @@ class MessageWidget extends StatelessWidget {
           )
       )
     );
+    return isAssistant 
+      ? FadeInLeft(child: child) 
+      : FadeInRight(
+        duration: const Duration(milliseconds: 300),
+        child: child
+      );
   }
 }

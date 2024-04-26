@@ -32,11 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: AppTheme.colorBackground,
-        appBarTheme: const AppBarTheme(color: Color.fromRGBO(247, 246, 252, 1)),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.materialTheme,
       home: const ChatPage(),
     );
   }

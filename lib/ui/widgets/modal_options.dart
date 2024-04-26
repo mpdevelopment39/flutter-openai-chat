@@ -44,7 +44,7 @@ class ModalOptions extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 6),
                   decoration: const BoxDecoration(
-                    color: AppTheme.colorOrangeLight,
+                    color: AppTheme.colorWhite,
                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,

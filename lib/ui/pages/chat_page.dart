@@ -39,12 +39,9 @@ class _ChatPageState extends ConsumerState<ChatPage> {
           ],
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right:10.0),
-            child: IconButton(
-              onPressed: _resetAction, 
-              icon: const Icon(Icons.restore)
-            ),
+          IconButton(
+            onPressed: _resetAction, 
+            icon: const Icon(Icons.restore)
           ),
           Padding(
             padding: const EdgeInsets.only(right:10.0),
@@ -95,8 +92,8 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                         MessageWidget(text: _textEditingController.text.toString(), 
                         userType: UserType.user));
                      _textEditingController.clear();
-                     /*
-                       ref.read(settingsProvider.notifier).addNewMessage(
+                     
+                       /* ref.read(settingsProvider.notifier).addNewMessage(
                         const MessageWidget(text: '',
                         userType: UserType.assistant,
                         isWriting: true,
@@ -105,8 +102,8 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                       ref.read(settingsProvider.notifier).addNewMessage(
                         const MessageWidget(text: 'Texto largo con la respuesta pasado x tiempo',
                         userType: UserType.assistant,
-                      ));
-                     */
+                      )); */
+                    
                   }, icon: const Icon(Icons.send)),
                 ],
               ),

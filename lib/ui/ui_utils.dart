@@ -8,7 +8,7 @@ class UiUtils {
   void showModalBottomWithOptions({required BuildContext context,required String title,required List<OptionModal> listOptions}) {
     showModalBottomSheet(
       elevation: 3,
-      backgroundColor: AppTheme.colorWhite,
+      backgroundColor: AppTheme.colorBackground,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       isDismissible: true,
       enableDrag: false,
