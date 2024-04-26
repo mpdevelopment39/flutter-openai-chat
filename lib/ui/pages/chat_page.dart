@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_openai_chat/app/constants.dart';
 import 'package:flutter_openai_chat/app/injector.dart';
@@ -114,8 +116,18 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     );
   }
 
-  void _resetAction(){
-    ref.read(settingsProvider.notifier).resetSettings();
+  void _resetAction() async {
+    if(await ref.read(settingsProvider.notifier).resetSettings()){
+      injector<UiUtils>().showSnackBar(
+        context: context, 
+        icon: const Icon(Icons.check_circle_rounded,color: AppTheme.colorGreen),
+        text: 'Settings reset correctly');
+    }else{
+      injector<UiUtils>().showSnackBar(
+        context: context, 
+        icon: const Icon(Icons.warning_rounded,color: AppTheme.colorRed),
+        text: 'Settings reset failed');
+    }
     Future.delayed(const Duration(milliseconds: 100)).then((value) {
       _insertStartMessage();
     });

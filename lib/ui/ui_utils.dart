@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_openai_chat/app/theme.dart';
+import 'package:flutter_openai_chat/ui/widgets/custom_snackbar.dart';
 import 'package:flutter_openai_chat/ui/widgets/custom_wheeler.dart';
 import 'package:flutter_openai_chat/ui/widgets/modal_options.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class UiUtils {
 
   void showModalBottomWithOptions({required BuildContext context,required String title,required List<OptionModal> listOptions}) {
     showModalBottomSheet(
       elevation: 3,
-      backgroundColor: AppTheme.colorBackground,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       isDismissible: true,
       enableDrag: false,
@@ -30,6 +31,14 @@ class UiUtils {
       enableDrag: false,
       context: context,
       builder: (_) => CustomWheleer(title: title,elements: elements,saveAction: saveAction));
+  }
+
+  void showSnackBar({required BuildContext context,required Icon icon,required String text,SnackBarPosition snackBarPosition = SnackBarPosition.bottom}) {
+    showTopSnackBar(
+      Overlay.of(context), 
+      CustomSnackbar(icon: icon, text: text),
+      snackBarPosition: snackBarPosition
+    );
   }
 
 }

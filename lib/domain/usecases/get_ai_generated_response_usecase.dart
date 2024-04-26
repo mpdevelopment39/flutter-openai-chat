@@ -11,7 +11,7 @@ class GetAIGeneratedResponseUseCase {
 
   Future<Response> call(String model,double temperature,List<Message> messages) async {
     try{
-      return _chatRepository.getAIGeneratedResponse(model,temperature,messages);
+      return await _chatRepository.getAIGeneratedResponse(model,temperature,messages);
     }catch(_){
       throw Exception();
     }
