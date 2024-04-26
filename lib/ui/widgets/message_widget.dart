@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_openai_chat/app/theme.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
-enum UserType { bot, user }
+enum UserType { assistant, user }
 
 class MessageWidget extends StatelessWidget {
   final String text;
@@ -11,20 +12,20 @@ class MessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isBot = userType == UserType.bot;
-    final messageAlign = isBot ? Alignment.centerLeft : Alignment.centerRight;
-    final messageColor = isBot ? AppTheme.colorWhite : AppTheme.colorBlue;
+    final isAssistant = userType == UserType.assistant;
+    final messageAlign = isAssistant ? Alignment.centerLeft : Alignment.centerRight;
+    final messageColor = isAssistant ? AppTheme.colorWhite : AppTheme.colorBlue;
 
     return Container(
-      margin: EdgeInsets.fromLTRB(isBot ? 0 : 60,8,!isBot ? 0 : 60,8),
+      margin: EdgeInsets.fromLTRB(isAssistant ? 0 : 60,8,!isAssistant ? 0 : 60,8),
       padding: const EdgeInsets.symmetric(vertical:12.0,horizontal: 20),
       decoration: BoxDecoration(
         color: messageColor,
         borderRadius: BorderRadius.only(
-          topLeft: isBot ? Radius.zero :const Radius.circular(12.0),
+          topLeft: isAssistant ? Radius.zero :const Radius.circular(12.0),
           topRight:  const Radius.circular(12.0),
           bottomLeft: const Radius.circular(12.0),
-          bottomRight:  isBot ? const Radius.circular(12.0) : Radius.zero,
+          bottomRight:  isAssistant ? const Radius.circular(12.0) : Radius.zero,
         ),
         boxShadow: const [
           BoxShadow(
@@ -43,21 +44,22 @@ class MessageWidget extends StatelessWidget {
               fontSize: 16.0,
               color: Colors.black,
             ),
-            child: Text(text,
+            child: /* Text(text,
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                    color: isBot ? Colors.black : Colors.white,
+                    color: isAssistant ? Colors.black : Colors.white,
                     fontSize: 16.0,
                   )
-                )
+                ) */
             
-             /* isBot 
+             isAssistant 
                 ? AnimatedTextKit(
                   animatedTexts: [
                     TypewriterAnimatedText(text),
                   ],
                   repeatForever: false,
                   isRepeatingAnimation: false,
+                  displayFullTextOnTap: true,
                   totalRepeatCount: 0,
                 )
                 : Text(text,
@@ -66,7 +68,7 @@ class MessageWidget extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 16.0,  
                   ),
-            ), */
+            ),
           )
       )
     );

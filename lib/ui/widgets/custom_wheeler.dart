@@ -74,6 +74,7 @@ class _CustomWheleerState extends ConsumerState<CustomWheleer> {
                           totalCount: widget.elements.length,
                           horizontal: false,
                           squeeze: 0.7,
+                          allowPointerTappable: true,
                           itemSize: 30,
                           listHeight: 150,
                           enableAnimation: false,

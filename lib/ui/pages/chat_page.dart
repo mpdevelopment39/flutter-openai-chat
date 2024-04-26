@@ -15,6 +15,16 @@ class ChatPage extends ConsumerStatefulWidget {
 }
 
 class _ChatPageState extends ConsumerState<ChatPage> {
+  TextEditingController _textEditingController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    Future(() {
+      ref.read(settingsProvider.notifier).addNewMessage(
+        const MessageWidget(text: 'How can I help you today?  Ask me something like: Tell me the 5 best restaurants in Barcelona.',
+        userType: UserType.assistant));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,38 +43,10 @@ class _ChatPageState extends ConsumerState<ChatPage> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right:10.0),
-            child: IconButton(onPressed: (){
-              injector<UiUtils>().showModalBottomWithOptions(
-                context: context,
-                title: 'Configure requests',
-                listOptions: [
-                  OptionModal('Model',() {
-                      Navigator.pop(context);
-                      injector<UiUtils>().showWheelOptions(context,
-                        "Select model",
-                        models,
-                        (selectedIndex) async {
-                          ref.watch(settingsProvider.notifier).updateModel(models[selectedIndex]);
-                          Navigator.pop(context);
-                        }
-                      );
-                    },
-                    const Icon(Icons.model_training_rounded)),
-                  OptionModal('Temperature', () {
-                      Navigator.pop(context);
-                      injector<UiUtils>().showWheelOptions(context,
-                        "Select temperature",
-                        temperatures,
-                        (selectedIndex) async {
-                          ref.watch(settingsProvider.notifier).updateTemperature(temperatures[selectedIndex]);
-                          Navigator.pop(context);
-                        }
-                      );
-                    },
-                  const Icon(Icons.thermostat_rounded)),
-                ]
-              );
-            }, icon: const Icon(Icons.settings)),
+            child: IconButton(
+              onPressed: settingsAction, 
+              icon: const Icon(Icons.settings)
+            ),
           )
         ],
       ),
@@ -79,16 +61,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                 radius: const Radius.circular(4),
                 child: ListView(
                   padding: const EdgeInsets.all(16.0),
-                  children: const [
-                    MessageWidget(
-                      text: '¡Hola! ¿Qué tal? con un texto larguisimo para ver como se comporta el contenedor y si cabe todo el texto en varias lineas. Sorprendentemente funciona como se espera.',
-                      userType: UserType.bot,
-                    ),
-                    MessageWidget(
-                      text: '¡Hola! ¿Qué tal? con un texto larguisimo para ver como se comporta el contenedor y si cabe todo el texto en varias lineas. Sorprendentemente funciona como se espera.',
-                      userType: UserType.user,
-                    ),
-                  ],
+                  children: ref.watch(settingsProvider).messages
                 ),
               ),
             ),
@@ -98,25 +71,65 @@ class _ChatPageState extends ConsumerState<ChatPage> {
               padding: const EdgeInsets.symmetric(horizontal:12),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(right:8.0),
+                      padding: const EdgeInsets.only(right:8.0),
                       child: TextField(
-                        style: TextStyle(color: Colors.black),
-                        decoration: InputDecoration.collapsed(
-                          hintText: "How can i help you?",
+                        controller: _textEditingController,
+                        style: const TextStyle(color: Colors.black),
+                        decoration: const InputDecoration.collapsed(
+                          hintText: "Ask me something",
                           hintStyle: TextStyle(color: Colors.black),
                         ),
                       ),
                     )
                   ),
-                  IconButton(onPressed: (){}, icon: const Icon(Icons.send)),
+                  IconButton(onPressed: (){
+                    if(_textEditingController.text.isEmpty) return;
+                    ref.read(settingsProvider.notifier).addNewMessage(
+                      MessageWidget(text: _textEditingController.text.toString(), 
+                      userType: UserType.user));
+                    _textEditingController.clear();
+                  }, icon: const Icon(Icons.send)),
                 ],
               ),
             )
           ],
         ),
       ),
+    );
+  }
+
+  void settingsAction(){
+    injector<UiUtils>().showModalBottomWithOptions(
+      context: context,
+      title: 'Configure requests',
+      listOptions: [
+        OptionModal('Model',() {
+            Navigator.pop(context);
+            injector<UiUtils>().showWheelOptions(context,
+              "Select model",
+              models,
+              (selectedIndex) async {
+                ref.watch(settingsProvider.notifier).updateModel(models[selectedIndex]);
+                Navigator.pop(context);
+              }
+            );
+          },
+          const Icon(Icons.model_training_rounded)),
+        OptionModal('Temperature', () {
+            Navigator.pop(context);
+            injector<UiUtils>().showWheelOptions(context,
+              "Select temperature",
+              temperatures,
+              (selectedIndex) async {
+                ref.watch(settingsProvider.notifier).updateTemperature(temperatures[selectedIndex]);
+                Navigator.pop(context);
+              }
+            );
+          },
+        const Icon(Icons.thermostat_rounded)),
+      ]
     );
   }
 }

@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SettingsState {
   String get model => throw _privateConstructorUsedError;
   double get temperature => throw _privateConstructorUsedError;
+  List<MessageWidget> get messages => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SettingsStateCopyWith<SettingsState> get copyWith =>
@@ -30,7 +31,7 @@ abstract class $SettingsStateCopyWith<$Res> {
           SettingsState value, $Res Function(SettingsState) then) =
       _$SettingsStateCopyWithImpl<$Res, SettingsState>;
   @useResult
-  $Res call({String model, double temperature});
+  $Res call({String model, double temperature, List<MessageWidget> messages});
 }
 
 /// @nodoc
@@ -48,6 +49,7 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
   $Res call({
     Object? model = null,
     Object? temperature = null,
+    Object? messages = null,
   }) {
     return _then(_value.copyWith(
       model: null == model
@@ -58,6 +60,10 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
           ? _value.temperature
           : temperature // ignore: cast_nullable_to_non_nullable
               as double,
+      messages: null == messages
+          ? _value.messages
+          : messages // ignore: cast_nullable_to_non_nullable
+              as List<MessageWidget>,
     ) as $Val);
   }
 }
@@ -70,7 +76,7 @@ abstract class _$$SettingsStateImplCopyWith<$Res>
       __$$SettingsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String model, double temperature});
+  $Res call({String model, double temperature, List<MessageWidget> messages});
 }
 
 /// @nodoc
@@ -86,6 +92,7 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
   $Res call({
     Object? model = null,
     Object? temperature = null,
+    Object? messages = null,
   }) {
     return _then(_$SettingsStateImpl(
       model: null == model
@@ -96,6 +103,10 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
           ? _value.temperature
           : temperature // ignore: cast_nullable_to_non_nullable
               as double,
+      messages: null == messages
+          ? _value.messages
+          : messages // ignore: cast_nullable_to_non_nullable
+              as List<MessageWidget>,
     ));
   }
 }
@@ -104,7 +115,9 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
 
 class _$SettingsStateImpl implements _SettingsState {
   const _$SettingsStateImpl(
-      {this.model = 'gpt-3.5-turbo', this.temperature = 0.5});
+      {this.model = 'gpt-3.5-turbo',
+      this.temperature = 0.5,
+      this.messages = const []});
 
   @override
   @JsonKey()
@@ -112,10 +125,13 @@ class _$SettingsStateImpl implements _SettingsState {
   @override
   @JsonKey()
   final double temperature;
+  @override
+  @JsonKey()
+  final List<MessageWidget> messages;
 
   @override
   String toString() {
-    return 'SettingsState(model: $model, temperature: $temperature)';
+    return 'SettingsState(model: $model, temperature: $temperature, messages: $messages)';
   }
 
   @override
@@ -125,11 +141,13 @@ class _$SettingsStateImpl implements _SettingsState {
             other is _$SettingsStateImpl &&
             (identical(other.model, model) || other.model == model) &&
             (identical(other.temperature, temperature) ||
-                other.temperature == temperature));
+                other.temperature == temperature) &&
+            const DeepCollectionEquality().equals(other.messages, messages));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, model, temperature);
+  int get hashCode => Object.hash(runtimeType, model, temperature,
+      const DeepCollectionEquality().hash(messages));
 
   @JsonKey(ignore: true)
   @override
@@ -139,13 +157,17 @@ class _$SettingsStateImpl implements _SettingsState {
 }
 
 abstract class _SettingsState implements SettingsState {
-  const factory _SettingsState({final String model, final double temperature}) =
-      _$SettingsStateImpl;
+  const factory _SettingsState(
+      {final String model,
+      final double temperature,
+      final List<MessageWidget> messages}) = _$SettingsStateImpl;
 
   @override
   String get model;
   @override
   double get temperature;
+  @override
+  List<MessageWidget> get messages;
   @override
   @JsonKey(ignore: true)
   _$$SettingsStateImplCopyWith<_$SettingsStateImpl> get copyWith =>

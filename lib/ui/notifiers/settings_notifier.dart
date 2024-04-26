@@ -1,3 +1,4 @@
+import 'package:flutter_openai_chat/ui/widgets/message_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../states/settings_state.dart';
@@ -15,6 +16,16 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   Future<void> updateTemperature(double temperatureSelected) async {
     SettingsState userSettings = state;
     state = userSettings.copyWith(temperature: temperatureSelected);
+  }
+
+  Future<void> addNewMessage(MessageWidget newMessage) async {
+    SettingsState userSettings = state;
+    List<MessageWidget> allMessages = List<MessageWidget>.empty(growable: true);
+    for (MessageWidget m in state.messages) {
+      allMessages.add(m);
+    }
+    allMessages.add(newMessage);
+    state = userSettings.copyWith(messages: allMessages);
   }
 
 }
