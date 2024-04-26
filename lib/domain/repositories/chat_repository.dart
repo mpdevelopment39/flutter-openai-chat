@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
+import '../models/message.dart';
+
 abstract class ChatRepository{
-  Future<List<String>> getModels();
-  Future<Response> getAiGeneratedResponse();
+  Future<Response> getAIGeneratedResponse(String model,double temperature,List<Message> messages);
 }

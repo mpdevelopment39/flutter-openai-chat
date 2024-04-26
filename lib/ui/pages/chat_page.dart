@@ -26,8 +26,8 @@ class _ChatPageState extends ConsumerState<ChatPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Text('OpenAI Chat Example'),
-            Text('Model: ${ref.watch(settingsProvider).model} (Temperature: ${ref.watch(settingsProvider).temperature})',style: Theme.of(context).textTheme.bodyMedium),
+            Text(ref.watch(settingsProvider).model),
+            Text('Temperature: ${ref.watch(settingsProvider).temperature}',style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),
         actions: [
@@ -104,7 +104,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                       child: TextField(
                         style: TextStyle(color: Colors.black),
                         decoration: InputDecoration.collapsed(
-                          hintText: "Con que puedo ayudarte",
+                          hintText: "How can i help you?",
                           hintStyle: TextStyle(color: Colors.black),
                         ),
                       ),
