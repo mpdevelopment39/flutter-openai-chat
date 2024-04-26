@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter_openai_chat/app/theme.dart';
 
 enum UserType { bot, user }
 
@@ -12,8 +12,8 @@ class MessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isBot = userType == UserType.bot;
-    final messageAlign = isBot ?  Alignment.centerLeft : Alignment.centerRight;
-    final messageColor = isBot ?  Colors.white : const Color.fromRGBO(106, 139, 244, 1);
+    final messageAlign = isBot ? Alignment.centerLeft : Alignment.centerRight;
+    final messageColor = isBot ? AppTheme.colorWhite : AppTheme.colorBlue;
 
     return Container(
       margin: EdgeInsets.fromLTRB(isBot ? 0 : 60,8,!isBot ? 0 : 60,8),
@@ -43,7 +43,15 @@ class MessageWidget extends StatelessWidget {
               fontSize: 16.0,
               color: Colors.black,
             ),
-            child: isBot 
+            child: Text(text,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: isBot ? Colors.black : Colors.white,
+                    fontSize: 16.0,
+                  )
+                )
+            
+             /* isBot 
                 ? AnimatedTextKit(
                   animatedTexts: [
                     TypewriterAnimatedText(text),
@@ -58,7 +66,7 @@ class MessageWidget extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 16.0,  
                   ),
-            ),
+            ), */
           )
       )
     );

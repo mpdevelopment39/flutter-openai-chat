@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_openai_chat/app/dio_chat.dart';
 import 'package:flutter_openai_chat/app/injector.dart';
