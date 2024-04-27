@@ -7,6 +7,7 @@ import 'package:flutter_openai_chat/ui/providers.dart';
 import 'package:flutter_openai_chat/ui/ui_utils.dart';
 import 'package:flutter_openai_chat/ui/widgets/message_widget.dart';
 import 'package:flutter_openai_chat/ui/widgets/modal_options.dart';
+import 'package:flutter_openai_chat/ui/widgets/suggestions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ChatPage extends ConsumerStatefulWidget {
@@ -23,7 +24,6 @@ class _ChatPageState extends ConsumerState<ChatPage> {
   @override
   void initState() {
     super.initState();
-    Future(() => _insertStartMessage());
     _scrollController.addListener(() {
       setState(() => scrollButtonVisible = _scrollController.offset < _scrollController.position.maxScrollExtent * 0.85);
     });
@@ -37,7 +37,8 @@ class _ChatPageState extends ConsumerState<ChatPage> {
 
   //TODO INVESTIGAR COMO HACER QUE EL SCROLL SE MUEVA A MEDIDA QUE SE VA ESCRIBIENDO LA RESPUESTA PARA NO TENER QUE NAVEGAR MANUALMENTE
   //TODO INVESTIGAR COMO HACER PARA QUE AL HACER SCROLL HACIA ARRIBA, LOS TEXTOS YA ESCRITOS PREVIAMENTE NO SE VUELVAN A CARGAR
-
+  //TODO METER EFECTO HÁPTICO AL ESCRIBIR EL CHAT
+  //TODO CAMBIAR EL FLOATING ACTION PARA QUE SEA SIMILAR AL DE LA APP DE CHATGPT
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,83 +69,93 @@ class _ChatPageState extends ConsumerState<ChatPage> {
       ),
       body: SafeArea(
         bottom: false,
-        child: Column(
+        child: Stack(
           children: [
-            Expanded(
-              child: RawScrollbar(
-                thumbVisibility: true,
-                thumbColor: AppTheme.colorGrey,
-                controller: _scrollController,
-                thickness: 4,
-                radius: const Radius.circular(4),
-                child: SingleChildScrollView(
+            Column(
+            children: [
+              Expanded(
+                child: RawScrollbar(
+                  thumbVisibility: true,
+                  thumbColor: AppTheme.colorGrey,
                   controller: _scrollController,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: ref.watch(settingsProvider).widgets
+                  thickness: 4,
+                  radius: const Radius.circular(4),
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: ref.watch(settingsProvider).widgets
+                      ),
                     ),
                   ),
+                  
                 ),
-                
               ),
-            ),
-            Container(
-              height: 100,
-              color: AppTheme.colorBlueLight,
-              padding: const EdgeInsets.symmetric(horizontal:12),
-              child: Padding(
-                padding: const EdgeInsets.only(bottom:40.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right:8.0),
-                        child: TextField(
-                          controller: _textEditingController,
-                          textCapitalization: TextCapitalization.sentences,
-                          decoration: const InputDecoration.collapsed(
-                            hintText: "Ask me something",
+              Container(
+                height: 100,
+                color: AppTheme.colorBlueLight,
+                padding: const EdgeInsets.symmetric(horizontal:12),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom:40.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right:8.0),
+                          child: TextField(
+                            controller: _textEditingController,
+                            textCapitalization: TextCapitalization.sentences,
+                            decoration: const InputDecoration.collapsed(
+                              hintText: "Ask me something",
+                            ),
                           ),
-                        ),
-                      )
-                    ),
-                    IconButton(onPressed: () async {
-                      if(_textEditingController.text.isEmpty) return;
-                      try{
-                        ref.read(settingsProvider.notifier).addNewMessage(
-                          MessageWidget(text: _textEditingController.text.toString(), 
-                          userType: UserType.user));
-                      }catch(_){
-                        injector<UiUtils>().showSnackBar(
-                          context: context,
-                          icon: const Icon(Icons.warning_rounded,color: AppTheme.colorRed),
-                          text: 'Error getting response');
-                      }
-                      _textEditingController.clear();
-                    }, icon: const Icon(Icons.send_rounded)),
-                  ],
+                        )
+                      ),
+                      IconButton(onPressed: () async {
+                        if(_textEditingController.text.isEmpty) return;
+                        try{
+                          ref.read(settingsProvider.notifier).addNewMessage(
+                            MessageWidget(text: _textEditingController.text.toString(), 
+                            userType: UserType.user));
+                        }catch(_){
+                          injector<UiUtils>().showSnackBar(
+                            context: context,
+                            icon: const Icon(Icons.warning_rounded,color: AppTheme.colorRed),
+                            text: 'Error getting response');
+                        }
+                        _textEditingController.clear();
+                      }, icon: const Icon(Icons.send_rounded)),
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+            ),
+            if(ref.watch(settingsProvider).widgets.isEmpty)
+              Suggestions(onTap : (index){
+                _textEditingController.clear();
+                _textEditingController.text = suggestions[index];
+              }),
+            Visibility(
+              visible: scrollButtonVisible,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom:80.0),
+                child: FloatingActionButton(
+                  onPressed: () => _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear),
+                  child: const Icon(Icons.swipe_down_rounded),
+                ),
+              )),
+          ]
         ),
       ),
-      floatingActionButton: Visibility(
-        visible: scrollButtonVisible,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom:80.0),
-          child: FloatingActionButton(
-            onPressed: () => _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear),
-            child: const Icon(Icons.swipe_down_rounded),
-          ),
-        )),
     );
   }
 
   void _resetAction() async {
     if(await ref.read(settingsProvider.notifier).resetSettings()){
       setState(() => scrollButtonVisible = false);
+      _textEditingController.clear();
       injector<UiUtils>().showSnackBar(
         context: context, 
         icon: const Icon(Icons.check_circle_rounded,color: AppTheme.colorGreen),
@@ -155,9 +166,6 @@ class _ChatPageState extends ConsumerState<ChatPage> {
         icon: const Icon(Icons.warning_rounded,color: AppTheme.colorRed),
         text: 'Settings reset failed');
     }
-    Future.delayed(const Duration(milliseconds: 100)).then((value) {
-      _insertStartMessage();
-    });
   }
 
   void _settingsAction(){
@@ -191,11 +199,5 @@ class _ChatPageState extends ConsumerState<ChatPage> {
         const Icon(Icons.thermostat_rounded)),
       ]
     );
-  }
-
-  void _insertStartMessage(){
-    ref.read(settingsProvider.notifier).addNewMessage(
-      const MessageWidget(text: 'How can I help you today?  Ask me something like: Tell me the 5 best restaurants in Barcelona.',
-      userType: UserType.assistant));
   }
 }

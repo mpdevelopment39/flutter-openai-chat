@@ -37,7 +37,7 @@ class UiUtils {
     showTopSnackBar(
       Overlay.of(context), 
       CustomSnackbar(icon: icon, text: text),
-      snackBarPosition: snackBarPosition
+      snackBarPosition: SnackBarPosition.top
     );
   }
 
