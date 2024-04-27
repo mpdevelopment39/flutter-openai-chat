@@ -26,6 +26,8 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     Future(() => _insertStartMessage());
   }
 
+  //TODO INVESTIGAR COMO HACER QUE EL SCROLL SE MUEVA A MEDIDA QUE SE VA ESCRIBIENDO LA RESPUESTA PARA NO TENER QUE NAVEGAR MANUALMENTE
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +67,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                 radius: const Radius.circular(4),
                 child: ListView(
                   padding: const EdgeInsets.all(16.0),
-                  children: ref.watch(settingsProvider).messages
+                  children: ref.watch(settingsProvider).widgets
                 ),
               ),
             ),
@@ -90,22 +92,17 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                   ),
                   IconButton(onPressed: () async {
                     if(_textEditingController.text.isEmpty) return;
-                      ref.read(settingsProvider.notifier).addNewMessage(
+                    try{
+                      await ref.read(settingsProvider.notifier).addNewMessage(
                         MessageWidget(text: _textEditingController.text.toString(), 
                         userType: UserType.user));
-                     _textEditingController.clear();
-                     
-                       /* ref.read(settingsProvider.notifier).addNewMessage(
-                        const MessageWidget(text: '',
-                        userType: UserType.assistant,
-                        isWriting: true,
-                      ));
-                      await Future.delayed(const Duration(seconds: 3));
-                      ref.read(settingsProvider.notifier).addNewMessage(
-                        const MessageWidget(text: 'Texto largo con la respuesta pasado x tiempo',
-                        userType: UserType.assistant,
-                      )); */
-                    
+                    }catch(_){
+                      injector<UiUtils>().showSnackBar(
+                        context: context,
+                        icon: const Icon(Icons.warning_rounded,color: AppTheme.colorRed),
+                        text: 'Error getting response');
+                    }
+                    _textEditingController.clear();
                   }, icon: const Icon(Icons.send)),
                 ],
               ),

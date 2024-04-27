@@ -8,16 +8,14 @@ part of 'completion_dto.dart';
 
 _$CompletionDTOImpl _$$CompletionDTOImplFromJson(Map<String, dynamic> json) =>
     _$CompletionDTOImpl(
+      model: json['model'] as String,
       choices: (json['choices'] as List<dynamic>)
           .map((e) => ChoiceDTO.fromJson(e as Map<String, dynamic>))
           .toList(),
-      model: json['model'] as String,
-      usage: UsageDTO.fromJson(json['usage'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$CompletionDTOImplToJson(_$CompletionDTOImpl instance) =>
     <String, dynamic>{
-      'choices': instance.choices,
       'model': instance.model,
-      'usage': instance.usage,
+      'choices': instance.choices,
     };

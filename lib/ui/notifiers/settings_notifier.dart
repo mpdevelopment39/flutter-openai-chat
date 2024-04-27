@@ -1,9 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_openai_chat/domain/models/message.dart';
 import 'package:flutter_openai_chat/domain/usecases/get_ai_generated_response_usecase.dart';
 import 'package:flutter_openai_chat/ui/widgets/message_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../app/injector.dart';
 import '../states/settings_state.dart';
 
@@ -12,8 +10,6 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   
   SettingsNotifier(this.ref) : super(const SettingsState());
   
-  GetAIGeneratedResponseUseCase getAIGeneratedResponseUseCase = injector<GetAIGeneratedResponseUseCase>();
-
   Future<bool> resetSettings() async {
     try{
       state = const SettingsState();
@@ -32,37 +28,42 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   }
 
   Future<void> addNewMessage(MessageWidget newMessage) async {
-    SettingsState userSettings = state;
-    List<MessageWidget> allMessages = List<MessageWidget>.empty(growable: true);
-    for (MessageWidget m in state.messages) {
+    SettingsState userSettings = state.copyWith();
+    List<MessageWidget> allWidgets = List<MessageWidget>.empty(growable: true);
+    List<Message> allMessages = List<Message>.empty(growable: true);
+    for (MessageWidget w in userSettings.widgets) {
+      allWidgets.add(w);
+    }
+    for (Message m in userSettings.messages) {
       allMessages.add(m);
     }
-    int index = allMessages.indexWhere((m) => m.isWriting);
+    int index = allWidgets.indexWhere((m) => m.isWriting);
     if(index != -1){
-      allMessages.removeAt(index);
+      allWidgets.removeAt(index);
     }
     if(newMessage.userType == UserType.assistant){
-      allMessages.add(newMessage);
-      state = userSettings.copyWith(messages: allMessages);
+      allWidgets.add(newMessage);
+      state = userSettings.copyWith(widgets: allWidgets);
     }else{
-      allMessages.add(newMessage);
-      state = userSettings.copyWith(messages: allMessages);
-      allMessages.add(const MessageWidget(text: '', userType: UserType.assistant,isWriting: true));
-      Response response = await getAIGeneratedResponseUseCase(state.model,state.temperature,_getMessages());
-      print("MIGUEL RESPONSE $response");
+      allMessages.add(Message(role: 'user', content: newMessage.text));
+      allWidgets.add(newMessage);
+      state = userSettings.copyWith(widgets: allWidgets,messages: allMessages);
+      allWidgets.add(const MessageWidget(text: '', userType: UserType.assistant,isWriting: true));
+      state = state.copyWith(widgets: allWidgets);
+      try{
+        String messageResponse = await injector<GetAIGeneratedResponseUseCase>().call(state.model,state.temperature,allMessages);
+        List<MessageWidget> newWidgets = state.widgets.toList();
+        newWidgets.removeWhere((m) => m.isWriting);
+        allMessages.add(Message(role: 'assistant', content: messageResponse));
+        newWidgets.add(MessageWidget(text: messageResponse, userType: UserType.assistant));
+        state = state.copyWith(widgets: newWidgets,messages: allMessages);
+      }catch(_){
+        List<MessageWidget> newWidgets = state.widgets.toList();
+        newWidgets.removeWhere((m) => m.isWriting);
+        state = state.copyWith(widgets: newWidgets);
+        throw Exception();
+      }
     }
-  }
-
-  List<Message> _getMessages(){
-    List<Message> messages = [];
-    for (MessageWidget m in state.messages) { 
-      messages.add(
-        Message(
-          role: m.userType == UserType.assistant ? 'assistant' : 'user', 
-          content: m.text)
-        );
-    }
-    return messages;
   }
 
 }
