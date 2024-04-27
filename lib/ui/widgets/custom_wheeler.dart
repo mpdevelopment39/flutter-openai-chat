@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_openai_chat/app/constants.dart';
 import 'package:flutter_openai_chat/ui/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -84,7 +85,10 @@ class _CustomWheleerState extends ConsumerState<CustomWheleer> {
                           initValue: selectedIndex,
                           verticalListWidth: double.infinity,
                           listWidth: double.infinity,
-                          onValueChanged: (index) => setState(() => selectedIndex = index),
+                          onValueChanged: (index) {
+                            setState(() => selectedIndex = index);
+                            HapticFeedback.lightImpact();
+                          },
                           hapticFeedbackType: HapticFeedbackType.vibrate,
                           children: List.generate(widget.elements.length, (index) => Center(child: Text(widget.elements[index].toString()))),
                         ),

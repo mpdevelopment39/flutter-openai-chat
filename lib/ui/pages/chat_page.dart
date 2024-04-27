@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_openai_chat/app/constants.dart';
+import 'package:flutter_openai_chat/app/helpers.dart';
 import 'package:flutter_openai_chat/app/injector.dart';
 import 'package:flutter_openai_chat/app/theme.dart';
 import 'package:flutter_openai_chat/ui/providers.dart';
@@ -35,10 +37,8 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     super.dispose();
   }
 
-  //TODO INVESTIGAR COMO HACER QUE EL SCROLL SE MUEVA A MEDIDA QUE SE VA ESCRIBIENDO LA RESPUESTA PARA NO TENER QUE NAVEGAR MANUALMENTE
-  //TODO INVESTIGAR COMO HACER PARA QUE AL HACER SCROLL HACIA ARRIBA, LOS TEXTOS YA ESCRITOS PREVIAMENTE NO SE VUELVAN A CARGAR
+  //TODO Hacer que al escribir, el scroll te lleve directamente al final pero correctamente.
   //TODO METER EFECTO HÁPTICO AL ESCRIBIR EL CHAT
-  //TODO CAMBIAR EL FLOATING ACTION PARA QUE SEA SIMILAR AL DE LA APP DE CHATGPT
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,37 +68,38 @@ class _ChatPageState extends ConsumerState<ChatPage> {
         ],
       ),
       body: SafeArea(
-        bottom: false,
+        bottom: true,
         child: Stack(
           children: [
             Column(
             children: [
               Expanded(
-                child: RawScrollbar(
-                  thumbVisibility: true,
-                  thumbColor: AppTheme.colorGrey,
-                  controller: _scrollController,
-                  thickness: 4,
-                  radius: const Radius.circular(4),
-                  child: SingleChildScrollView(
+                child: GestureDetector(
+                  onTap: () => Helpers().hideKeyboard(context),
+                  child: RawScrollbar(
+                    thumbVisibility: true,
+                    thumbColor: AppTheme.colorGrey,
                     controller: _scrollController,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: ref.watch(settingsProvider).widgets
+                    thickness: 4,
+                    radius: const Radius.circular(4),
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: ref.watch(settingsProvider).widgets
+                        ),
                       ),
                     ),
+                    
                   ),
-                  
                 ),
               ),
               Container(
-                height: 100,
+                height: 60,
                 color: AppTheme.colorBlueLight,
                 padding: const EdgeInsets.symmetric(horizontal:12),
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom:40.0),
-                  child: Row(
+                child: Row(
                     children: [
                       Expanded(
                         child: Padding(
@@ -115,9 +116,11 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                       IconButton(onPressed: () async {
                         if(_textEditingController.text.isEmpty) return;
                         try{
+                          HapticFeedback.selectionClick();
                           ref.read(settingsProvider.notifier).addNewMessage(
                             MessageWidget(text: _textEditingController.text.toString(), 
                             userType: UserType.user));
+                          _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear);
                         }catch(_){
                           injector<UiUtils>().showSnackBar(
                             context: context,
@@ -129,7 +132,6 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                     ],
                   ),
                 ),
-              )
             ],
             ),
             if(ref.watch(settingsProvider).widgets.isEmpty)
@@ -137,15 +139,25 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                 _textEditingController.clear();
                 _textEditingController.text = suggestions[index];
               }),
-            Visibility(
-              visible: scrollButtonVisible,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom:80.0),
-                child: FloatingActionButton(
-                  onPressed: () => _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear),
-                  child: const Icon(Icons.swipe_down_rounded),
+            Positioned(
+              bottom: 5,
+              left: 0,
+              right: 0,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: scrollButtonVisible ? 1 : 0,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom:80.0),
+                  child: GestureDetector(
+                    onTap: () => _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear),
+                    child: const CircleAvatar(
+                      radius: 20,
+                      backgroundColor: AppTheme.colorBlue,
+                      child: Icon(Icons.arrow_downward_rounded)),
+                  ),
                 ),
-              )),
+              ),
+            ),
           ]
         ),
       ),
@@ -153,6 +165,8 @@ class _ChatPageState extends ConsumerState<ChatPage> {
   }
 
   void _resetAction() async {
+    HapticFeedback.selectionClick();
+    Helpers().hideKeyboard(context);
     if(await ref.read(settingsProvider.notifier).resetSettings()){
       setState(() => scrollButtonVisible = false);
       _textEditingController.clear();
@@ -169,6 +183,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
   }
 
   void _settingsAction(){
+    HapticFeedback.selectionClick();
     injector<UiUtils>().showModalBottomWithOptions(
       context: context,
       title: 'Configure requests',
@@ -179,6 +194,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
               "Select model",
               models,
               (selectedIndex) async {
+                HapticFeedback.selectionClick();
                 ref.watch(settingsProvider.notifier).updateModel(models[selectedIndex]);
                 Navigator.pop(context);
               }
@@ -191,6 +207,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
               "Select temperature",
               temperatures,
               (selectedIndex) async {
+                HapticFeedback.selectionClick();
                 ref.watch(settingsProvider.notifier).updateTemperature(temperatures[selectedIndex]);
                 Navigator.pop(context);
               }

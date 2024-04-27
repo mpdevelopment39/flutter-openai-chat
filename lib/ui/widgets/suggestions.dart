@@ -8,7 +8,7 @@ class Suggestions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 120,
+      bottom: 90,
       left: 10,
       right: 0,
       child: SizedBox(

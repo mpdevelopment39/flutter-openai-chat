@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_openai_chat/app/constants.dart';
 import 'package:flutter_openai_chat/app/theme.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -67,6 +68,7 @@ class MessageWidget extends StatelessWidget {
                 isRepeatingAnimation: false,
                 displayFullTextOnTap: true,
                 totalRepeatCount: 0,
+                onNext: (p0, p1) => HapticFeedback.lightImpact(),
               )
               : Text(text,
                 textAlign: TextAlign.right,
