@@ -29,9 +29,9 @@ class ModalOptions extends StatelessWidget {
                   const Spacer(),
                   Align(
                     alignment: Alignment.center,
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: const Icon(
+                    child: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(
                         Icons.close_rounded,
                         size: 28,
                       ),

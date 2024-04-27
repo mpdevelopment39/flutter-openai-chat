@@ -9,10 +9,10 @@ class UiUtils {
 
   void showModalBottomWithOptions({required BuildContext context,required String title,required List<OptionModal> listOptions}) {
     showModalBottomSheet(
-      elevation: 3,
+      elevation: 5,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       isDismissible: true,
-      enableDrag: false,
+      enableDrag: true,
       context: context,
       builder: (_) {
         return ModalOptions(
