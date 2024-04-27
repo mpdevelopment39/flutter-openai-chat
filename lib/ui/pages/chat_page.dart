@@ -27,6 +27,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
   }
 
   //TODO INVESTIGAR COMO HACER QUE EL SCROLL SE MUEVA A MEDIDA QUE SE VA ESCRIBIENDO LA RESPUESTA PARA NO TENER QUE NAVEGAR MANUALMENTE
+  //TODO INVESTIGAR COMO HACER PARA QUE AL HACER SCROLL HACIA ARRIBA, LOS TEXTOS YA ESCRITOS PREVIAMENTE NO SE VUELVAN A CARGAR
 
   @override
   Widget build(BuildContext context) {
@@ -59,16 +60,21 @@ class _ChatPageState extends ConsumerState<ChatPage> {
       body: SafeArea(
         child: Column(
           children: [
-            Flexible(
+            Expanded(
               child: RawScrollbar(
                 thumbVisibility: true,
                 thumbColor: AppTheme.colorGrey,
                 thickness: 4,
                 radius: const Radius.circular(4),
-                child: ListView(
-                  padding: const EdgeInsets.all(16.0),
-                  children: ref.watch(settingsProvider).widgets
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: ref.watch(settingsProvider).widgets
+                    ),
+                  ),
                 ),
+                
               ),
             ),
             Container(
