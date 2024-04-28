@@ -20,9 +20,10 @@ ChoiceDTO _$ChoiceDTOFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ChoiceDTO {
-  String get finishReason => throw _privateConstructorUsedError;
-  int get index => throw _privateConstructorUsedError;
-  MessageDTO get message => throw _privateConstructorUsedError;
+  String? get finishReason => throw _privateConstructorUsedError;
+  int? get index => throw _privateConstructorUsedError;
+  MessageDTO? get message => throw _privateConstructorUsedError;
+  dynamic get logprobs => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,9 +36,13 @@ abstract class $ChoiceDTOCopyWith<$Res> {
   factory $ChoiceDTOCopyWith(ChoiceDTO value, $Res Function(ChoiceDTO) then) =
       _$ChoiceDTOCopyWithImpl<$Res, ChoiceDTO>;
   @useResult
-  $Res call({String finishReason, int index, MessageDTO message});
+  $Res call(
+      {String? finishReason,
+      int? index,
+      MessageDTO? message,
+      dynamic logprobs});
 
-  $MessageDTOCopyWith<$Res> get message;
+  $MessageDTOCopyWith<$Res>? get message;
 }
 
 /// @nodoc
@@ -53,30 +58,39 @@ class _$ChoiceDTOCopyWithImpl<$Res, $Val extends ChoiceDTO>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? finishReason = null,
-    Object? index = null,
-    Object? message = null,
+    Object? finishReason = freezed,
+    Object? index = freezed,
+    Object? message = freezed,
+    Object? logprobs = freezed,
   }) {
     return _then(_value.copyWith(
-      finishReason: null == finishReason
+      finishReason: freezed == finishReason
           ? _value.finishReason
           : finishReason // ignore: cast_nullable_to_non_nullable
-              as String,
-      index: null == index
+              as String?,
+      index: freezed == index
           ? _value.index
           : index // ignore: cast_nullable_to_non_nullable
-              as int,
-      message: null == message
+              as int?,
+      message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
-              as MessageDTO,
+              as MessageDTO?,
+      logprobs: freezed == logprobs
+          ? _value.logprobs
+          : logprobs // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $MessageDTOCopyWith<$Res> get message {
-    return $MessageDTOCopyWith<$Res>(_value.message, (value) {
+  $MessageDTOCopyWith<$Res>? get message {
+    if (_value.message == null) {
+      return null;
+    }
+
+    return $MessageDTOCopyWith<$Res>(_value.message!, (value) {
       return _then(_value.copyWith(message: value) as $Val);
     });
   }
@@ -90,10 +104,14 @@ abstract class _$$ChoiceDTOImplCopyWith<$Res>
       __$$ChoiceDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String finishReason, int index, MessageDTO message});
+  $Res call(
+      {String? finishReason,
+      int? index,
+      MessageDTO? message,
+      dynamic logprobs});
 
   @override
-  $MessageDTOCopyWith<$Res> get message;
+  $MessageDTOCopyWith<$Res>? get message;
 }
 
 /// @nodoc
@@ -107,23 +125,28 @@ class __$$ChoiceDTOImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? finishReason = null,
-    Object? index = null,
-    Object? message = null,
+    Object? finishReason = freezed,
+    Object? index = freezed,
+    Object? message = freezed,
+    Object? logprobs = freezed,
   }) {
     return _then(_$ChoiceDTOImpl(
-      finishReason: null == finishReason
+      finishReason: freezed == finishReason
           ? _value.finishReason
           : finishReason // ignore: cast_nullable_to_non_nullable
-              as String,
-      index: null == index
+              as String?,
+      index: freezed == index
           ? _value.index
           : index // ignore: cast_nullable_to_non_nullable
-              as int,
-      message: null == message
+              as int?,
+      message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
-              as MessageDTO,
+              as MessageDTO?,
+      logprobs: freezed == logprobs
+          ? _value.logprobs
+          : logprobs // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ));
   }
 }
@@ -132,21 +155,23 @@ class __$$ChoiceDTOImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ChoiceDTOImpl implements _ChoiceDTO {
   const _$ChoiceDTOImpl(
-      {required this.finishReason, required this.index, required this.message});
+      {this.finishReason, this.index, this.message, this.logprobs});
 
   factory _$ChoiceDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChoiceDTOImplFromJson(json);
 
   @override
-  final String finishReason;
+  final String? finishReason;
   @override
-  final int index;
+  final int? index;
   @override
-  final MessageDTO message;
+  final MessageDTO? message;
+  @override
+  final dynamic logprobs;
 
   @override
   String toString() {
-    return 'ChoiceDTO(finishReason: $finishReason, index: $index, message: $message)';
+    return 'ChoiceDTO(finishReason: $finishReason, index: $index, message: $message, logprobs: $logprobs)';
   }
 
   @override
@@ -157,12 +182,14 @@ class _$ChoiceDTOImpl implements _ChoiceDTO {
             (identical(other.finishReason, finishReason) ||
                 other.finishReason == finishReason) &&
             (identical(other.index, index) || other.index == index) &&
-            (identical(other.message, message) || other.message == message));
+            (identical(other.message, message) || other.message == message) &&
+            const DeepCollectionEquality().equals(other.logprobs, logprobs));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, finishReason, index, message);
+  int get hashCode => Object.hash(runtimeType, finishReason, index, message,
+      const DeepCollectionEquality().hash(logprobs));
 
   @JsonKey(ignore: true)
   @override
@@ -180,19 +207,22 @@ class _$ChoiceDTOImpl implements _ChoiceDTO {
 
 abstract class _ChoiceDTO implements ChoiceDTO {
   const factory _ChoiceDTO(
-      {required final String finishReason,
-      required final int index,
-      required final MessageDTO message}) = _$ChoiceDTOImpl;
+      {final String? finishReason,
+      final int? index,
+      final MessageDTO? message,
+      final dynamic logprobs}) = _$ChoiceDTOImpl;
 
   factory _ChoiceDTO.fromJson(Map<String, dynamic> json) =
       _$ChoiceDTOImpl.fromJson;
 
   @override
-  String get finishReason;
+  String? get finishReason;
   @override
-  int get index;
+  int? get index;
   @override
-  MessageDTO get message;
+  MessageDTO? get message;
+  @override
+  dynamic get logprobs;
   @override
   @JsonKey(ignore: true)
   _$$ChoiceDTOImplCopyWith<_$ChoiceDTOImpl> get copyWith =>

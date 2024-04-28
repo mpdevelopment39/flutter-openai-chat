@@ -20,8 +20,8 @@ MessageDTO _$MessageDTOFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$MessageDTO {
-  String get content => throw _privateConstructorUsedError;
-  String get role => throw _privateConstructorUsedError;
+  String? get content => throw _privateConstructorUsedError;
+  String? get role => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +35,7 @@ abstract class $MessageDTOCopyWith<$Res> {
           MessageDTO value, $Res Function(MessageDTO) then) =
       _$MessageDTOCopyWithImpl<$Res, MessageDTO>;
   @useResult
-  $Res call({String content, String role});
+  $Res call({String? content, String? role});
 }
 
 /// @nodoc
@@ -51,18 +51,18 @@ class _$MessageDTOCopyWithImpl<$Res, $Val extends MessageDTO>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? content = null,
-    Object? role = null,
+    Object? content = freezed,
+    Object? role = freezed,
   }) {
     return _then(_value.copyWith(
-      content: null == content
+      content: freezed == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      role: null == role
+              as String?,
+      role: freezed == role
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -75,7 +75,7 @@ abstract class _$$MessageDTOImplCopyWith<$Res>
       __$$MessageDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String content, String role});
+  $Res call({String? content, String? role});
 }
 
 /// @nodoc
@@ -89,18 +89,18 @@ class __$$MessageDTOImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? content = null,
-    Object? role = null,
+    Object? content = freezed,
+    Object? role = freezed,
   }) {
     return _then(_$MessageDTOImpl(
-      content: null == content
+      content: freezed == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      role: null == role
+              as String?,
+      role: freezed == role
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -108,15 +108,15 @@ class __$$MessageDTOImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$MessageDTOImpl implements _MessageDTO {
-  const _$MessageDTOImpl({required this.content, required this.role});
+  const _$MessageDTOImpl({this.content, this.role});
 
   factory _$MessageDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$MessageDTOImplFromJson(json);
 
   @override
-  final String content;
+  final String? content;
   @override
-  final String role;
+  final String? role;
 
   @override
   String toString() {
@@ -151,17 +151,16 @@ class _$MessageDTOImpl implements _MessageDTO {
 }
 
 abstract class _MessageDTO implements MessageDTO {
-  const factory _MessageDTO(
-      {required final String content,
-      required final String role}) = _$MessageDTOImpl;
+  const factory _MessageDTO({final String? content, final String? role}) =
+      _$MessageDTOImpl;
 
   factory _MessageDTO.fromJson(Map<String, dynamic> json) =
       _$MessageDTOImpl.fromJson;
 
   @override
-  String get content;
+  String? get content;
   @override
-  String get role;
+  String? get role;
   @override
   @JsonKey(ignore: true)
   _$$MessageDTOImplCopyWith<_$MessageDTOImpl> get copyWith =>

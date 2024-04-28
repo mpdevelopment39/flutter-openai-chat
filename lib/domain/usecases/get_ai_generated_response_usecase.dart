@@ -13,5 +13,4 @@ class GetAIGeneratedResponseUseCase {
       throw Exception();
     }
   }
-
 }

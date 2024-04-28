@@ -8,9 +8,12 @@ part of 'choice_dto.dart';
 
 _$ChoiceDTOImpl _$$ChoiceDTOImplFromJson(Map<String, dynamic> json) =>
     _$ChoiceDTOImpl(
-      finishReason: json['finishReason'] as String,
-      index: (json['index'] as num).toInt(),
-      message: MessageDTO.fromJson(json['message'] as Map<String, dynamic>),
+      finishReason: json['finishReason'] as String?,
+      index: (json['index'] as num?)?.toInt(),
+      message: json['message'] == null
+          ? null
+          : MessageDTO.fromJson(json['message'] as Map<String, dynamic>),
+      logprobs: json['logprobs'],
     );
 
 Map<String, dynamic> _$$ChoiceDTOImplToJson(_$ChoiceDTOImpl instance) =>
@@ -18,4 +21,5 @@ Map<String, dynamic> _$$ChoiceDTOImplToJson(_$ChoiceDTOImpl instance) =>
       'finishReason': instance.finishReason,
       'index': instance.index,
       'message': instance.message,
+      'logprobs': instance.logprobs,
     };

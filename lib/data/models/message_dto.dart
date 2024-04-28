@@ -5,8 +5,8 @@ part 'message_dto.g.dart';
 @freezed
 class MessageDTO with _$MessageDTO{
   const factory MessageDTO({
-    required String content,
-    required String role
+    String? content,
+    String? role,
   }) = _MessageDTO;
   factory MessageDTO.fromJson(Map<String,dynamic> json) => _$MessageDTOFromJson(json);
 }

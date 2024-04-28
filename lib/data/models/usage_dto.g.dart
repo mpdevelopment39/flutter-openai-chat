@@ -8,9 +8,9 @@ part of 'usage_dto.dart';
 
 _$UsageDTOImpl _$$UsageDTOImplFromJson(Map<String, dynamic> json) =>
     _$UsageDTOImpl(
-      completionTokens: (json['completionTokens'] as num).toInt(),
-      promptTokens: (json['promptTokens'] as num).toInt(),
-      totalTokens: (json['totalTokens'] as num).toInt(),
+      completionTokens: (json['completionTokens'] as num?)?.toInt(),
+      promptTokens: (json['promptTokens'] as num?)?.toInt(),
+      totalTokens: (json['totalTokens'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$UsageDTOImplToJson(_$UsageDTOImpl instance) =>

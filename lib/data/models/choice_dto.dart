@@ -5,9 +5,10 @@ part 'choice_dto.g.dart';
 @freezed
 class ChoiceDTO with _$ChoiceDTO{
   const factory ChoiceDTO({
-    required String finishReason,
-    required int index,
-    required MessageDTO message
+    String? finishReason,
+    int? index,
+    MessageDTO? message,
+    dynamic logprobs,
   }) = _ChoiceDTO;
   factory ChoiceDTO.fromJson(Map<String,dynamic> json) => _$ChoiceDTOFromJson(json);
 }

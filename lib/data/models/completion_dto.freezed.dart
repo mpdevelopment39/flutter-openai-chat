@@ -20,8 +20,11 @@ CompletionDTO _$CompletionDTOFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CompletionDTO {
-  String get model => throw _privateConstructorUsedError;
-  List<ChoiceDTO> get choices => throw _privateConstructorUsedError;
+  List<ChoiceDTO>? get choices => throw _privateConstructorUsedError;
+  int? get created => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
+  String? get model => throw _privateConstructorUsedError;
+  UsageDTO? get usage => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +38,14 @@ abstract class $CompletionDTOCopyWith<$Res> {
           CompletionDTO value, $Res Function(CompletionDTO) then) =
       _$CompletionDTOCopyWithImpl<$Res, CompletionDTO>;
   @useResult
-  $Res call({String model, List<ChoiceDTO> choices});
+  $Res call(
+      {List<ChoiceDTO>? choices,
+      int? created,
+      String? id,
+      String? model,
+      UsageDTO? usage});
+
+  $UsageDTOCopyWith<$Res>? get usage;
 }
 
 /// @nodoc
@@ -51,19 +61,46 @@ class _$CompletionDTOCopyWithImpl<$Res, $Val extends CompletionDTO>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? model = null,
-    Object? choices = null,
+    Object? choices = freezed,
+    Object? created = freezed,
+    Object? id = freezed,
+    Object? model = freezed,
+    Object? usage = freezed,
   }) {
     return _then(_value.copyWith(
-      model: null == model
-          ? _value.model
-          : model // ignore: cast_nullable_to_non_nullable
-              as String,
-      choices: null == choices
+      choices: freezed == choices
           ? _value.choices
           : choices // ignore: cast_nullable_to_non_nullable
-              as List<ChoiceDTO>,
+              as List<ChoiceDTO>?,
+      created: freezed == created
+          ? _value.created
+          : created // ignore: cast_nullable_to_non_nullable
+              as int?,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      model: freezed == model
+          ? _value.model
+          : model // ignore: cast_nullable_to_non_nullable
+              as String?,
+      usage: freezed == usage
+          ? _value.usage
+          : usage // ignore: cast_nullable_to_non_nullable
+              as UsageDTO?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UsageDTOCopyWith<$Res>? get usage {
+    if (_value.usage == null) {
+      return null;
+    }
+
+    return $UsageDTOCopyWith<$Res>(_value.usage!, (value) {
+      return _then(_value.copyWith(usage: value) as $Val);
+    });
   }
 }
 
@@ -75,7 +112,15 @@ abstract class _$$CompletionDTOImplCopyWith<$Res>
       __$$CompletionDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String model, List<ChoiceDTO> choices});
+  $Res call(
+      {List<ChoiceDTO>? choices,
+      int? created,
+      String? id,
+      String? model,
+      UsageDTO? usage});
+
+  @override
+  $UsageDTOCopyWith<$Res>? get usage;
 }
 
 /// @nodoc
@@ -89,18 +134,33 @@ class __$$CompletionDTOImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? model = null,
-    Object? choices = null,
+    Object? choices = freezed,
+    Object? created = freezed,
+    Object? id = freezed,
+    Object? model = freezed,
+    Object? usage = freezed,
   }) {
     return _then(_$CompletionDTOImpl(
-      model: null == model
-          ? _value.model
-          : model // ignore: cast_nullable_to_non_nullable
-              as String,
-      choices: null == choices
+      choices: freezed == choices
           ? _value._choices
           : choices // ignore: cast_nullable_to_non_nullable
-              as List<ChoiceDTO>,
+              as List<ChoiceDTO>?,
+      created: freezed == created
+          ? _value.created
+          : created // ignore: cast_nullable_to_non_nullable
+              as int?,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      model: freezed == model
+          ? _value.model
+          : model // ignore: cast_nullable_to_non_nullable
+              as String?,
+      usage: freezed == usage
+          ? _value.usage
+          : usage // ignore: cast_nullable_to_non_nullable
+              as UsageDTO?,
     ));
   }
 }
@@ -109,25 +169,38 @@ class __$$CompletionDTOImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CompletionDTOImpl implements _CompletionDTO {
   const _$CompletionDTOImpl(
-      {required this.model, required final List<ChoiceDTO> choices})
+      {final List<ChoiceDTO>? choices,
+      this.created,
+      this.id,
+      this.model,
+      this.usage})
       : _choices = choices;
 
   factory _$CompletionDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$CompletionDTOImplFromJson(json);
 
+  final List<ChoiceDTO>? _choices;
   @override
-  final String model;
-  final List<ChoiceDTO> _choices;
-  @override
-  List<ChoiceDTO> get choices {
+  List<ChoiceDTO>? get choices {
+    final value = _choices;
+    if (value == null) return null;
     if (_choices is EqualUnmodifiableListView) return _choices;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_choices);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
+  final int? created;
+  @override
+  final String? id;
+  @override
+  final String? model;
+  @override
+  final UsageDTO? usage;
+
+  @override
   String toString() {
-    return 'CompletionDTO(model: $model, choices: $choices)';
+    return 'CompletionDTO(choices: $choices, created: $created, id: $id, model: $model, usage: $usage)';
   }
 
   @override
@@ -135,14 +208,17 @@ class _$CompletionDTOImpl implements _CompletionDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CompletionDTOImpl &&
+            const DeepCollectionEquality().equals(other._choices, _choices) &&
+            (identical(other.created, created) || other.created == created) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.model, model) || other.model == model) &&
-            const DeepCollectionEquality().equals(other._choices, _choices));
+            (identical(other.usage, usage) || other.usage == usage));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, model, const DeepCollectionEquality().hash(_choices));
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_choices), created, id, model, usage);
 
   @JsonKey(ignore: true)
   @override
@@ -160,16 +236,25 @@ class _$CompletionDTOImpl implements _CompletionDTO {
 
 abstract class _CompletionDTO implements CompletionDTO {
   const factory _CompletionDTO(
-      {required final String model,
-      required final List<ChoiceDTO> choices}) = _$CompletionDTOImpl;
+      {final List<ChoiceDTO>? choices,
+      final int? created,
+      final String? id,
+      final String? model,
+      final UsageDTO? usage}) = _$CompletionDTOImpl;
 
   factory _CompletionDTO.fromJson(Map<String, dynamic> json) =
       _$CompletionDTOImpl.fromJson;
 
   @override
-  String get model;
+  List<ChoiceDTO>? get choices;
   @override
-  List<ChoiceDTO> get choices;
+  int? get created;
+  @override
+  String? get id;
+  @override
+  String? get model;
+  @override
+  UsageDTO? get usage;
   @override
   @JsonKey(ignore: true)
   _$$CompletionDTOImplCopyWith<_$CompletionDTOImpl> get copyWith =>

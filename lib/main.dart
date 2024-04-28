@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
 //* Posibles acciones a implementar a futuro para seguir manteniendo el repo
 //TODO Añadir icono
 //TODO Añadir splash
-//TODO Añadir BBDD Isar o Back de Firebase para almacenar historial de conversaciones y ajustes de usuario
-//TODO Añadir la obtención de modelos de la api
 //TODO Añadir localización de la app
 //TODO Añadir modos Dark/Light
+//TODO Añadir BBDD Isar o Back de Firebase para almacenar historial de conversaciones y ajustes de usuario
+//TODO Añadir la obtención de modelos de la api
 //TODO Añadir un efecto háptico en la escritura del chat

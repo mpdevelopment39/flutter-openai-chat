@@ -20,9 +20,9 @@ UsageDTO _$UsageDTOFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UsageDTO {
-  int get completionTokens => throw _privateConstructorUsedError;
-  int get promptTokens => throw _privateConstructorUsedError;
-  int get totalTokens => throw _privateConstructorUsedError;
+  int? get completionTokens => throw _privateConstructorUsedError;
+  int? get promptTokens => throw _privateConstructorUsedError;
+  int? get totalTokens => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +35,7 @@ abstract class $UsageDTOCopyWith<$Res> {
   factory $UsageDTOCopyWith(UsageDTO value, $Res Function(UsageDTO) then) =
       _$UsageDTOCopyWithImpl<$Res, UsageDTO>;
   @useResult
-  $Res call({int completionTokens, int promptTokens, int totalTokens});
+  $Res call({int? completionTokens, int? promptTokens, int? totalTokens});
 }
 
 /// @nodoc
@@ -51,23 +51,23 @@ class _$UsageDTOCopyWithImpl<$Res, $Val extends UsageDTO>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? completionTokens = null,
-    Object? promptTokens = null,
-    Object? totalTokens = null,
+    Object? completionTokens = freezed,
+    Object? promptTokens = freezed,
+    Object? totalTokens = freezed,
   }) {
     return _then(_value.copyWith(
-      completionTokens: null == completionTokens
+      completionTokens: freezed == completionTokens
           ? _value.completionTokens
           : completionTokens // ignore: cast_nullable_to_non_nullable
-              as int,
-      promptTokens: null == promptTokens
+              as int?,
+      promptTokens: freezed == promptTokens
           ? _value.promptTokens
           : promptTokens // ignore: cast_nullable_to_non_nullable
-              as int,
-      totalTokens: null == totalTokens
+              as int?,
+      totalTokens: freezed == totalTokens
           ? _value.totalTokens
           : totalTokens // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ) as $Val);
   }
 }
@@ -80,7 +80,7 @@ abstract class _$$UsageDTOImplCopyWith<$Res>
       __$$UsageDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int completionTokens, int promptTokens, int totalTokens});
+  $Res call({int? completionTokens, int? promptTokens, int? totalTokens});
 }
 
 /// @nodoc
@@ -94,23 +94,23 @@ class __$$UsageDTOImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? completionTokens = null,
-    Object? promptTokens = null,
-    Object? totalTokens = null,
+    Object? completionTokens = freezed,
+    Object? promptTokens = freezed,
+    Object? totalTokens = freezed,
   }) {
     return _then(_$UsageDTOImpl(
-      completionTokens: null == completionTokens
+      completionTokens: freezed == completionTokens
           ? _value.completionTokens
           : completionTokens // ignore: cast_nullable_to_non_nullable
-              as int,
-      promptTokens: null == promptTokens
+              as int?,
+      promptTokens: freezed == promptTokens
           ? _value.promptTokens
           : promptTokens // ignore: cast_nullable_to_non_nullable
-              as int,
-      totalTokens: null == totalTokens
+              as int?,
+      totalTokens: freezed == totalTokens
           ? _value.totalTokens
           : totalTokens // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ));
   }
 }
@@ -119,19 +119,17 @@ class __$$UsageDTOImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UsageDTOImpl implements _UsageDTO {
   const _$UsageDTOImpl(
-      {required this.completionTokens,
-      required this.promptTokens,
-      required this.totalTokens});
+      {this.completionTokens, this.promptTokens, this.totalTokens});
 
   factory _$UsageDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$UsageDTOImplFromJson(json);
 
   @override
-  final int completionTokens;
+  final int? completionTokens;
   @override
-  final int promptTokens;
+  final int? promptTokens;
   @override
-  final int totalTokens;
+  final int? totalTokens;
 
   @override
   String toString() {
@@ -172,19 +170,19 @@ class _$UsageDTOImpl implements _UsageDTO {
 
 abstract class _UsageDTO implements UsageDTO {
   const factory _UsageDTO(
-      {required final int completionTokens,
-      required final int promptTokens,
-      required final int totalTokens}) = _$UsageDTOImpl;
+      {final int? completionTokens,
+      final int? promptTokens,
+      final int? totalTokens}) = _$UsageDTOImpl;
 
   factory _UsageDTO.fromJson(Map<String, dynamic> json) =
       _$UsageDTOImpl.fromJson;
 
   @override
-  int get completionTokens;
+  int? get completionTokens;
   @override
-  int get promptTokens;
+  int? get promptTokens;
   @override
-  int get totalTokens;
+  int? get totalTokens;
   @override
   @JsonKey(ignore: true)
   _$$UsageDTOImplCopyWith<_$UsageDTOImpl> get copyWith =>
