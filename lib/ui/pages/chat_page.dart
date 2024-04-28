@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_openai_chat/app/constants.dart';
@@ -22,13 +23,13 @@ class ChatPage extends ConsumerStatefulWidget {
 class _ChatPageState extends ConsumerState<ChatPage> {
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  bool scrollButtonVisible = false;
+  StateProvider<bool> scrollVisible = StateProvider((ref) => false);
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(() {
-      setState(() => scrollButtonVisible = _scrollController.offset < _scrollController.position.maxScrollExtent * 0.85);
+      ref.read(scrollVisible.notifier).state = _scrollController.offset < _scrollController.position.maxScrollExtent * 0.85;
     });
   }
 
@@ -38,24 +39,32 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     super.dispose();
   }
 
-  //TODO Hacer que al escribir, el scroll te lleve directamente al final pero correctamente.
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(ref.watch(chatProvider).model),
-            Text('Temperature: ${ref.watch(chatProvider).temperature}',style: Theme.of(context).textTheme.bodyMedium),
-          ],
+        title: FadeInDown(
+          duration: const Duration(milliseconds: 300),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(ref.watch(chatProvider).model),
+              Text('Temperature: ${ref.watch(chatProvider).temperature}',style: Theme.of(context).textTheme.bodyMedium),
+            ],
+          ),
         ),
         actions: [
-          IconButton(onPressed: _resetAction,icon: const Icon(Icons.restore)),
-          Padding(
-            padding: const EdgeInsets.only(right:10.0),
-            child: IconButton(onPressed: _settingsAction,icon: const Icon(Icons.settings)),
+          FadeInRight(
+            duration: const Duration(milliseconds: 400),
+            child: Row(
+              children: [
+                IconButton(onPressed: _resetAction,icon: const Icon(Icons.restore)),
+                Padding(
+                  padding: const EdgeInsets.only(right:10.0),
+                  child: IconButton(onPressed: _settingsAction,icon: const Icon(Icons.settings)),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -85,7 +94,10 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                   ),
                 ),
               ),
-              Container(
+              FadeInUp(
+                duration: const Duration(milliseconds: 400),
+                from: 30,
+                child: Container(
                 height: 60,
                 color: AppTheme.colorBlueLight,
                 padding: const EdgeInsets.symmetric(horizontal:12),
@@ -110,7 +122,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                         ref.read(chatProvider.notifier).addNewMessage(
                           MessageWidget(text: _textEditingController.text.toString(), 
                           userType: UserType.user));
-                        _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear);
+                        _scrollController.animateTo(_scrollController.position.maxScrollExtent + 300, duration: const Duration(milliseconds: 100), curve: Curves.linear);
                       }catch(_){
                         injector<UiUtils>().showSnackBar(
                           context: context,
@@ -122,7 +134,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                   ],
                 ),
               ),
-            ],
+            )],
             ),
             if(ref.watch(chatProvider).widgets.isEmpty)
               Suggestions(onTap : (index){
@@ -135,9 +147,9 @@ class _ChatPageState extends ConsumerState<ChatPage> {
               right: 0,
               child: AnimatedOpacity(
                 duration: const Duration(milliseconds: 200),
-                opacity: scrollButtonVisible ? 1 : 0,
+                opacity: ref.watch(scrollVisible) ? 1 : 0,
                 child: GestureDetector(
-                  onTap: () => _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear),
+                  onTap: () => _scrollController.animateTo(_scrollController.position.maxScrollExtent + 300, duration: const Duration(milliseconds: 100), curve: Curves.linear),
                   child: const CircleAvatar(
                     radius: 20,
                     backgroundColor: AppTheme.colorBlue,
@@ -155,7 +167,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     HapticFeedback.selectionClick();
     injector<Helpers>().hideKeyboard(context);
     if(await ref.read(chatProvider.notifier).resetSettings()){
-      setState(() => scrollButtonVisible = false);
+      ref.read(scrollVisible.notifier).state = false; 
       _textEditingController.clear();
       injector<UiUtils>().showSnackBar(
         context: context, 
@@ -175,7 +187,9 @@ class _ChatPageState extends ConsumerState<ChatPage> {
       context: context,
       title: 'Configure requests',
       listOptions: [
-        OptionModal('Model',() {
+        OptionModal(
+          'Model',
+          () {
             Navigator.pop(context);
             injector<UiUtils>().showWheelOptions(context,
               "Select model",
@@ -188,19 +202,22 @@ class _ChatPageState extends ConsumerState<ChatPage> {
             );
           },
           const Icon(Icons.model_training_rounded)),
-        OptionModal('Temperature', () {
-          Navigator.pop(context);
-          injector<UiUtils>().showWheelOptions(context,
-            "Select temperature",
-            temperatures,
-            (selectedIndex) async {
-              HapticFeedback.selectionClick();
-              ref.watch(chatProvider.notifier).updateTemperature(temperatures[selectedIndex]);
-              Navigator.pop(context);
-            }
-          );
-        },
-        const Icon(Icons.thermostat_rounded)),
+        OptionModal(
+          'Temperature',
+          () {
+            Navigator.pop(context);
+            injector<UiUtils>().showWheelOptions(context,
+              "Select temperature",
+              temperatures,
+              (selectedIndex) async {
+                HapticFeedback.selectionClick();
+                ref.watch(chatProvider.notifier).updateTemperature(temperatures[selectedIndex]);
+                Navigator.pop(context);
+              }
+            );
+          },
+          const Icon(Icons.thermostat_rounded)
+        ),
       ]
     );
   }

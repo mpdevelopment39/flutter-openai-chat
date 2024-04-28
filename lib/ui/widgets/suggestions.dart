@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_openai_chat/app/constants.dart';
 
@@ -8,36 +9,40 @@ class Suggestions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 90,
+      bottom: 80,
       left: 10,
       right: 0,
-      child: SizedBox(
-        height: 70,
-        child: ListView.builder(
-          itemCount: suggestions.length,
-          scrollDirection: Axis.horizontal,
-          controller: ScrollController(),
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () => onTap(index),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-                  ),
-                  width: 200,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Center(
-                      child: Text(suggestions[index],maxLines: 2)
+      child: FadeInLeftBig(
+        duration: const Duration(milliseconds: 600),
+        from: 30,
+        child: SizedBox(
+          height: 70,
+          child: ListView.builder(
+            itemCount: suggestions.length,
+            scrollDirection: Axis.horizontal,
+            controller: ScrollController(),
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () => onTap(index),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                    ),
+                    width: 200,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Center(
+                        child: Text(suggestions[index],maxLines: 2)
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

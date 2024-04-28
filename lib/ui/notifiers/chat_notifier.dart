@@ -38,7 +38,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
       allWidgets.add(newMessage);
       state = state.copyWith(widgets: allWidgets);
     }else{
-      allMessages.add(Message(role: 'user', content: newMessage.text));
+      allMessages.add(Message(role: UserType.user.name.toString(), content: newMessage.text));
       allWidgets.add(newMessage);
       state = state.copyWith(widgets: allWidgets,messages: allMessages);
       allWidgets.add(const MessageWidget(text: '', userType: UserType.assistant,isWriting: true));
@@ -47,7 +47,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
         String messageResponse = await injector<GetAIGeneratedResponseUseCase>().call(state.model,state.temperature,allMessages);
         List<MessageWidget> newWidgets = state.widgets.toList();
         newWidgets.removeWhere((m) => m.isWriting);
-        allMessages.add(Message(role: 'assistant', content: messageResponse));
+        allMessages.add(Message(role: UserType.assistant.name.toString(), content: messageResponse));
         newWidgets.add(MessageWidget(text: messageResponse, userType: UserType.assistant));
         state = state.copyWith(widgets: newWidgets,messages: allMessages);
       }catch(_){
