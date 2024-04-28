@@ -15,7 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ChatPage extends ConsumerStatefulWidget {
   const ChatPage({super.key});
 
-@override
+  @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChatPageState();
 }
 
@@ -23,6 +23,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool scrollButtonVisible = false;
+
   @override
   void initState() {
     super.initState();
@@ -38,44 +39,34 @@ class _ChatPageState extends ConsumerState<ChatPage> {
   }
 
   //TODO Hacer que al escribir, el scroll te lleve directamente al final pero correctamente.
-  //TODO METER EFECTO HÁPTICO AL ESCRIBIR EL CHAT
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.colorBackground,
       appBar: AppBar(
-        centerTitle: false,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(ref.watch(settingsProvider).model),
-            Text('Temperature: ${ref.watch(settingsProvider).temperature}',style: Theme.of(context).textTheme.bodyMedium),
+            Text(ref.watch(chatProvider).model),
+            Text('Temperature: ${ref.watch(chatProvider).temperature}',style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),
         actions: [
-          IconButton(
-            onPressed: _resetAction, 
-            icon: const Icon(Icons.restore)
-          ),
+          IconButton(onPressed: _resetAction,icon: const Icon(Icons.restore)),
           Padding(
             padding: const EdgeInsets.only(right:10.0),
-            child: IconButton(
-              onPressed: _settingsAction, 
-              icon: const Icon(Icons.settings)
-            ),
+            child: IconButton(onPressed: _settingsAction,icon: const Icon(Icons.settings)),
           ),
         ],
       ),
       body: SafeArea(
-        bottom: true,
         child: Stack(
           children: [
             Column(
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: () => Helpers().hideKeyboard(context),
+                  onTap: () => injector<Helpers>().hideKeyboard(context),
                   child: RawScrollbar(
                     thumbVisibility: true,
                     thumbColor: AppTheme.colorGrey,
@@ -87,11 +78,10 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
-                          children: ref.watch(settingsProvider).widgets
+                          children: ref.watch(chatProvider).widgets
                         ),
                       ),
                     ),
-                    
                   ),
                 ),
               ),
@@ -100,61 +90,58 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                 color: AppTheme.colorBlueLight,
                 padding: const EdgeInsets.symmetric(horizontal:12),
                 child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right:8.0),
-                          child: TextField(
-                            controller: _textEditingController,
-                            textCapitalization: TextCapitalization.sentences,
-                            decoration: const InputDecoration.collapsed(
-                              hintText: "Ask me something",
-                            ),
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right:8.0),
+                        child: TextField(
+                          controller: _textEditingController,
+                          textCapitalization: TextCapitalization.sentences,
+                          decoration: const InputDecoration.collapsed(
+                            hintText: "Ask me something",
                           ),
-                        )
-                      ),
-                      IconButton(onPressed: () async {
-                        if(_textEditingController.text.isEmpty) return;
-                        try{
-                          HapticFeedback.selectionClick();
-                          ref.read(settingsProvider.notifier).addNewMessage(
-                            MessageWidget(text: _textEditingController.text.toString(), 
-                            userType: UserType.user));
-                          _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear);
-                        }catch(_){
-                          injector<UiUtils>().showSnackBar(
-                            context: context,
-                            icon: const Icon(Icons.warning_rounded,color: AppTheme.colorRed),
-                            text: 'Error getting response');
-                        }
-                        _textEditingController.clear();
-                      }, icon: const Icon(Icons.send_rounded)),
-                    ],
-                  ),
+                        ),
+                      )
+                    ),
+                    IconButton(onPressed: () async {
+                      if(_textEditingController.text.isEmpty) return;
+                      try{
+                        HapticFeedback.selectionClick();
+                        ref.read(chatProvider.notifier).addNewMessage(
+                          MessageWidget(text: _textEditingController.text.toString(), 
+                          userType: UserType.user));
+                        _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear);
+                      }catch(_){
+                        injector<UiUtils>().showSnackBar(
+                          context: context,
+                          icon: const Icon(Icons.warning_rounded,color: AppTheme.colorRed),
+                          text: 'Error getting response');
+                      }
+                      _textEditingController.clear();
+                    }, icon: const Icon(Icons.send_rounded)),
+                  ],
                 ),
+              ),
             ],
             ),
-            if(ref.watch(settingsProvider).widgets.isEmpty)
+            if(ref.watch(chatProvider).widgets.isEmpty)
               Suggestions(onTap : (index){
                 _textEditingController.clear();
                 _textEditingController.text = suggestions[index];
               }),
             Positioned(
-              bottom: 5,
+              bottom: 75,
               left: 0,
               right: 0,
               child: AnimatedOpacity(
                 duration: const Duration(milliseconds: 200),
                 opacity: scrollButtonVisible ? 1 : 0,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom:80.0),
-                  child: GestureDetector(
-                    onTap: () => _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear),
-                    child: const CircleAvatar(
-                      radius: 20,
-                      backgroundColor: AppTheme.colorBlue,
-                      child: Icon(Icons.arrow_downward_rounded)),
-                  ),
+                child: GestureDetector(
+                  onTap: () => _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear),
+                  child: const CircleAvatar(
+                    radius: 20,
+                    backgroundColor: AppTheme.colorBlue,
+                    child: Icon(Icons.arrow_downward_rounded)),
                 ),
               ),
             ),
@@ -166,8 +153,8 @@ class _ChatPageState extends ConsumerState<ChatPage> {
 
   void _resetAction() async {
     HapticFeedback.selectionClick();
-    Helpers().hideKeyboard(context);
-    if(await ref.read(settingsProvider.notifier).resetSettings()){
+    injector<Helpers>().hideKeyboard(context);
+    if(await ref.read(chatProvider.notifier).resetSettings()){
       setState(() => scrollButtonVisible = false);
       _textEditingController.clear();
       injector<UiUtils>().showSnackBar(
@@ -195,24 +182,24 @@ class _ChatPageState extends ConsumerState<ChatPage> {
               models,
               (selectedIndex) async {
                 HapticFeedback.selectionClick();
-                ref.watch(settingsProvider.notifier).updateModel(models[selectedIndex]);
+                ref.watch(chatProvider.notifier).updateModel(models[selectedIndex]);
                 Navigator.pop(context);
               }
             );
           },
           const Icon(Icons.model_training_rounded)),
         OptionModal('Temperature', () {
-            Navigator.pop(context);
-            injector<UiUtils>().showWheelOptions(context,
-              "Select temperature",
-              temperatures,
-              (selectedIndex) async {
-                HapticFeedback.selectionClick();
-                ref.watch(settingsProvider.notifier).updateTemperature(temperatures[selectedIndex]);
-                Navigator.pop(context);
-              }
-            );
-          },
+          Navigator.pop(context);
+          injector<UiUtils>().showWheelOptions(context,
+            "Select temperature",
+            temperatures,
+            (selectedIndex) async {
+              HapticFeedback.selectionClick();
+              ref.watch(chatProvider.notifier).updateTemperature(temperatures[selectedIndex]);
+              Navigator.pop(context);
+            }
+          );
+        },
         const Icon(Icons.thermostat_rounded)),
       ]
     );

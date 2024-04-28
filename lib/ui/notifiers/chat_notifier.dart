@@ -3,51 +3,44 @@ import 'package:flutter_openai_chat/domain/usecases/get_ai_generated_response_us
 import 'package:flutter_openai_chat/ui/widgets/message_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/injector.dart';
-import '../states/settings_state.dart';
+import '../states/chat_state.dart';
 
-class SettingsNotifier extends StateNotifier<SettingsState> {
+//* Clase para gestionar la lógica asociada al chat
+class ChatNotifier extends StateNotifier<ChatState> {
   Ref ref;
-  
-  SettingsNotifier(this.ref) : super(const SettingsState());
+  ChatNotifier(this.ref) : super(const ChatState());
   
   Future<bool> resetSettings() async {
     try{
-      state = const SettingsState();
+      state = const ChatState();
       return true;
-    }catch(_){ return false;}
+    }catch(_){return false;}
   }
   
   Future<void> updateModel(String modelSelected) async {
-    SettingsState userSettings = state;
-    state = userSettings.copyWith(model: modelSelected);
+    ChatState chatState = state;
+    state = chatState.copyWith(model: modelSelected);
   }
 
   Future<void> updateTemperature(double temperatureSelected) async {
-    SettingsState userSettings = state;
-    state = userSettings.copyWith(temperature: temperatureSelected);
+    ChatState chatState = state;
+    state = chatState.copyWith(temperature: temperatureSelected);
   }
 
   Future<void> addNewMessage(MessageWidget newMessage) async {
-    SettingsState userSettings = state.copyWith();
     List<MessageWidget> allWidgets = List<MessageWidget>.empty(growable: true);
     List<Message> allMessages = List<Message>.empty(growable: true);
-    for (MessageWidget w in userSettings.widgets) {
-      allWidgets.add(w);
-    }
-    for (Message m in userSettings.messages) {
-      allMessages.add(m);
-    }
+    allWidgets = state.widgets.toList();
+    allMessages = state.messages.toList();
     int index = allWidgets.indexWhere((m) => m.isWriting);
-    if(index != -1){
-      allWidgets.removeAt(index);
-    }
+    if(index != -1) allWidgets.removeAt(index);
     if(newMessage.userType == UserType.assistant){
       allWidgets.add(newMessage);
-      state = userSettings.copyWith(widgets: allWidgets);
+      state = state.copyWith(widgets: allWidgets);
     }else{
       allMessages.add(Message(role: 'user', content: newMessage.text));
       allWidgets.add(newMessage);
-      state = userSettings.copyWith(widgets: allWidgets,messages: allMessages);
+      state = state.copyWith(widgets: allWidgets,messages: allMessages);
       allWidgets.add(const MessageWidget(text: '', userType: UserType.assistant,isWriting: true));
       state = state.copyWith(widgets: allWidgets);
       try{

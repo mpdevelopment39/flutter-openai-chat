@@ -19,7 +19,6 @@ class MessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final isAssistant = userType == UserType.assistant;
     final messageAlign = isAssistant ? Alignment.centerLeft : Alignment.centerRight;
-    final messageColor = isAssistant ? AppTheme.colorWhite : AppTheme.colorBlue;
     if(isWriting && isAssistant){
       return FadeInDown(
         from: 20,
@@ -35,7 +34,7 @@ class MessageWidget extends StatelessWidget {
       margin: EdgeInsets.fromLTRB(isAssistant ? 0 : 60,8,!isAssistant ? 0 : 60,8),
       padding: const EdgeInsets.symmetric(vertical:12.0,horizontal: 20),
       decoration: BoxDecoration(
-        color: messageColor,
+        color: isAssistant ? AppTheme.colorWhite : AppTheme.colorBlue,
         borderRadius: BorderRadius.only(
           topLeft: isAssistant ? Radius.zero :const Radius.circular(12.0),
           topRight:  const Radius.circular(12.0),
@@ -82,9 +81,6 @@ class MessageWidget extends StatelessWidget {
     );
     return isAssistant 
       ? FadeInLeft(child: child) 
-      : FadeInRight(
-        duration: const Duration(milliseconds: 300),
-        child: child
-      );
+      : FadeInRight(duration: const Duration(milliseconds: 300), child: child);
   }
 }

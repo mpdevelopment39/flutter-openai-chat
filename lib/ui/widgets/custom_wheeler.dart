@@ -25,9 +25,9 @@ class _CustomWheleerState extends ConsumerState<CustomWheleer> {
   void initState() {
     super.initState();
     if(widget.elements == temperatures){
-      selectedIndex = temperatures.indexOf(ref.read(settingsProvider).temperature);
+      selectedIndex = temperatures.indexOf(ref.read(chatProvider).temperature);
     }else{
-      selectedIndex = models.indexOf(ref.read(settingsProvider).model);
+      selectedIndex = models.indexOf(ref.read(chatProvider).model);
     }
   }
 
@@ -47,13 +47,15 @@ class _CustomWheleerState extends ConsumerState<CustomWheleer> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextButton(onPressed: (){
-                    Navigator.pop(context);
-                  }, child: const Text('Cancel')),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context), 
+                    child: const Text('Cancel')
+                  ),
                   Text(widget.title,style: const TextStyle(fontWeight: FontWeight.w600),),
-                  TextButton(onPressed: () async {
-                    await widget.saveAction(selectedIndex);
-                  }, child: const Text('Save')),
+                  TextButton(
+                    onPressed: () async => await widget.saveAction(selectedIndex), 
+                    child: const Text('Save')
+                  ),
                 ],
               ),
               Expanded(

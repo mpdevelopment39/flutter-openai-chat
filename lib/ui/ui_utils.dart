@@ -5,6 +5,7 @@ import 'package:flutter_openai_chat/ui/widgets/custom_wheeler.dart';
 import 'package:flutter_openai_chat/ui/widgets/modal_options.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+//* Clase para gestionar diferentes utilidades de UI (Modales, snackbars...)
 class UiUtils {
 
   void showModalBottomWithOptions({required BuildContext context,required String title,required List<OptionModal> listOptions}) {

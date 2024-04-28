@@ -15,8 +15,7 @@ class CustomSnackbar extends StatelessWidget {
       child: Material(
         child: Container(
           padding: const EdgeInsets.all(16),
-          decoration: const BoxDecoration(
-              color: AppTheme.colorBlack),
+          decoration: const BoxDecoration(color: AppTheme.colorBlack),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,

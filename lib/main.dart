@@ -14,9 +14,7 @@ Future<void> main() async {
   Injector();
   
   //* Seteamos la orientación del dispositivo por defecto vertical.
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   
   //* Utilizamos el paquete de device_preview para poder hacer pruebas de interfaz en cualquier dispositivo
   runApp(DevicePreview(
@@ -38,6 +36,10 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//* Posibles acciones a implementar a futuro para seguir manteniendo el repo
 //TODO Añadir icono
 //TODO Añadir splash
-//
+//TODO Añadir BBDD Isar o Back de Firebase para almacenar historial de conversaciones y ajustes de usuario
+//TODO Añadir la obtención de modelos de la api
+//TODO Añadir localización de la app
+//TODO Añadir un efecto háptico en la escritura del chat

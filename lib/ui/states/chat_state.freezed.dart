@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'settings_state.dart';
+part of 'chat_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,22 +15,21 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$SettingsState {
+mixin _$ChatState {
   String get model => throw _privateConstructorUsedError;
   double get temperature => throw _privateConstructorUsedError;
   List<MessageWidget> get widgets => throw _privateConstructorUsedError;
   List<Message> get messages => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $SettingsStateCopyWith<SettingsState> get copyWith =>
+  $ChatStateCopyWith<ChatState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SettingsStateCopyWith<$Res> {
-  factory $SettingsStateCopyWith(
-          SettingsState value, $Res Function(SettingsState) then) =
-      _$SettingsStateCopyWithImpl<$Res, SettingsState>;
+abstract class $ChatStateCopyWith<$Res> {
+  factory $ChatStateCopyWith(ChatState value, $Res Function(ChatState) then) =
+      _$ChatStateCopyWithImpl<$Res, ChatState>;
   @useResult
   $Res call(
       {String model,
@@ -40,9 +39,9 @@ abstract class $SettingsStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
-    implements $SettingsStateCopyWith<$Res> {
-  _$SettingsStateCopyWithImpl(this._value, this._then);
+class _$ChatStateCopyWithImpl<$Res, $Val extends ChatState>
+    implements $ChatStateCopyWith<$Res> {
+  _$ChatStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -79,11 +78,11 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
 }
 
 /// @nodoc
-abstract class _$$SettingsStateImplCopyWith<$Res>
-    implements $SettingsStateCopyWith<$Res> {
-  factory _$$SettingsStateImplCopyWith(
-          _$SettingsStateImpl value, $Res Function(_$SettingsStateImpl) then) =
-      __$$SettingsStateImplCopyWithImpl<$Res>;
+abstract class _$$ChatStateImplCopyWith<$Res>
+    implements $ChatStateCopyWith<$Res> {
+  factory _$$ChatStateImplCopyWith(
+          _$ChatStateImpl value, $Res Function(_$ChatStateImpl) then) =
+      __$$ChatStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -94,11 +93,11 @@ abstract class _$$SettingsStateImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$SettingsStateImplCopyWithImpl<$Res>
-    extends _$SettingsStateCopyWithImpl<$Res, _$SettingsStateImpl>
-    implements _$$SettingsStateImplCopyWith<$Res> {
-  __$$SettingsStateImplCopyWithImpl(
-      _$SettingsStateImpl _value, $Res Function(_$SettingsStateImpl) _then)
+class __$$ChatStateImplCopyWithImpl<$Res>
+    extends _$ChatStateCopyWithImpl<$Res, _$ChatStateImpl>
+    implements _$$ChatStateImplCopyWith<$Res> {
+  __$$ChatStateImplCopyWithImpl(
+      _$ChatStateImpl _value, $Res Function(_$ChatStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -109,7 +108,7 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
     Object? widgets = null,
     Object? messages = null,
   }) {
-    return _then(_$SettingsStateImpl(
+    return _then(_$ChatStateImpl(
       model: null == model
           ? _value.model
           : model // ignore: cast_nullable_to_non_nullable
@@ -132,8 +131,8 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SettingsStateImpl implements _SettingsState {
-  const _$SettingsStateImpl(
+class _$ChatStateImpl implements _ChatState {
+  const _$ChatStateImpl(
       {this.model = 'gpt-3.5-turbo',
       this.temperature = 0.5,
       this.widgets = const [],
@@ -154,14 +153,14 @@ class _$SettingsStateImpl implements _SettingsState {
 
   @override
   String toString() {
-    return 'SettingsState(model: $model, temperature: $temperature, widgets: $widgets, messages: $messages)';
+    return 'ChatState(model: $model, temperature: $temperature, widgets: $widgets, messages: $messages)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SettingsStateImpl &&
+            other is _$ChatStateImpl &&
             (identical(other.model, model) || other.model == model) &&
             (identical(other.temperature, temperature) ||
                 other.temperature == temperature) &&
@@ -180,16 +179,16 @@ class _$SettingsStateImpl implements _SettingsState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SettingsStateImplCopyWith<_$SettingsStateImpl> get copyWith =>
-      __$$SettingsStateImplCopyWithImpl<_$SettingsStateImpl>(this, _$identity);
+  _$$ChatStateImplCopyWith<_$ChatStateImpl> get copyWith =>
+      __$$ChatStateImplCopyWithImpl<_$ChatStateImpl>(this, _$identity);
 }
 
-abstract class _SettingsState implements SettingsState {
-  const factory _SettingsState(
+abstract class _ChatState implements ChatState {
+  const factory _ChatState(
       {final String model,
       final double temperature,
       final List<MessageWidget> widgets,
-      final List<Message> messages}) = _$SettingsStateImpl;
+      final List<Message> messages}) = _$ChatStateImpl;
 
   @override
   String get model;
@@ -201,6 +200,6 @@ abstract class _SettingsState implements SettingsState {
   List<Message> get messages;
   @override
   @JsonKey(ignore: true)
-  _$$SettingsStateImplCopyWith<_$SettingsStateImpl> get copyWith =>
+  _$$ChatStateImplCopyWith<_$ChatStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
