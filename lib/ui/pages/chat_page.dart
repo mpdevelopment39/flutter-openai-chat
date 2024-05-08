@@ -36,6 +36,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _textEditingController.dispose();
     super.dispose();
   }
 
