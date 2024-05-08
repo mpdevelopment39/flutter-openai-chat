@@ -118,9 +118,11 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                     IconButton(onPressed: () async {
                       if(_textEditingController.text.isEmpty) return;
                       try{
+                        String message = _textEditingController.text;
+                        _textEditingController.clear();
                         HapticFeedback.selectionClick();
                         await ref.read(chatProvider.notifier).addNewMessage(
-                          MessageWidget(text: _textEditingController.text.toString(), 
+                          MessageWidget(text: message, 
                           userType: UserType.user));
                       }catch(_){
                         injector<UiUtils>().showSnackBar(
@@ -128,7 +130,6 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                           icon: const Icon(Icons.warning_rounded,color: AppTheme.colorRed),
                           text: 'Error getting response. Try again');
                       }
-                      _textEditingController.clear();
                       _scrollController.animateTo(_scrollController.position.maxScrollExtent + 300, duration: const Duration(milliseconds: 100), curve: Curves.linear);
                     }, icon: const Icon(Icons.send_rounded)),
                   ],

@@ -41,7 +41,6 @@ flutter:
   assets:
     - assets/anims/
     - assets/fonts/
-    - assets/images/
     - assets/readme/
     - .env
   # An image asset can refer to one or more resolution-specific "variants", see

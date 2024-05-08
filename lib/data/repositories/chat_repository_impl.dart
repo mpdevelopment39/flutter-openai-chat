@@ -5,7 +5,6 @@ import 'package:flutter_openai_chat/data/models/completion_dto.dart';
 import 'package:flutter_openai_chat/domain/repositories/chat_repository.dart';
 
 import '../../domain/models/message.dart';
-import '../models/choice_dto.dart';
 
 class ChatRepositoryImpl implements ChatRepository{
   final Dio _dioChat = injector<DioChat>().dio;
